@@ -28,6 +28,7 @@
 	job_flags = STATION_JOB_FLAGS
 
 	job_tone = "objection"
+<<<<<<< HEAD
 	alt_titles = list(
 		"Lawyer",
 		"Internal Affairs Agent",
@@ -38,6 +39,8 @@
 		"Prosecutor",
 		"Legal Clerk",
 	)
+=======
+>>>>>>> c729c3690a8e121d99a735ee854c3f32dbccb0e0
 
 /datum/outfit/job/lawyer
 	name = "Lawyer"
