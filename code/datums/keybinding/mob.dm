@@ -9,7 +9,7 @@
 	description = ""
 	keybind_signal = COMSIG_KB_MOB_STOPPULLING_DOWN
 
-/datum/keybinding/mob/stop_pulling/down(client/user, turf/target)
+/datum/keybinding/mob/stop_pulling/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
@@ -27,7 +27,7 @@
 	description = ""
 	keybind_signal = COMSIG_KB_MOB_SWAPHANDS_DOWN
 
-/datum/keybinding/mob/swap_hands/down(client/user, turf/target)
+/datum/keybinding/mob/swap_hands/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
@@ -52,7 +52,7 @@
 	keybind_signal = COMSIG_KB_MOB_SELECTLEFTHAND_DOWN
 	hand_index = LEFT_HANDS
 
-/datum/keybinding/mob/select_hand/down(client/user, turf/target)
+/datum/keybinding/mob/select_hand/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
@@ -72,7 +72,7 @@
 	description = "Uses whatever item you have inhand"
 	keybind_signal = COMSIG_KB_MOB_ACTIVATEINHAND_DOWN
 
-/datum/keybinding/mob/activate_inhand/down(client/user, turf/target)
+/datum/keybinding/mob/activate_inhand/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
@@ -84,24 +84,49 @@
 	hotkey_keys = list("X")
 	name = "drop_item"
 	full_name = "Drop Item"
-	description = ""
+	description = "Drops the item in your active hand to the ground."
 	keybind_signal = COMSIG_KB_MOB_DROPITEM_DOWN
 
-/datum/keybinding/mob/drop_item/down(client/user, turf/target)
+/datum/keybinding/mob/drop_item/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
 	if(iscyborg(user.mob)) //cyborgs can't drop items
 		return FALSE
-	var/mob/M = user.mob
-	var/obj/item/I = M.get_active_held_item()
-	if(!I)
+	var/mob/user_mob = user.mob
+	var/obj/item/item_dropped = user_mob.get_active_held_item()
+	if(!item_dropped)
 		to_chat(user, span_warning("You have nothing to drop in your hand!"))
-	else
-		user.mob.dropItemToGround(I)
+		return TRUE
+	user.mob.dropItemToGround(item_dropped)
 	return TRUE
 
-/datum/keybinding/mob/target/down(client/user, turf/target)
+/datum/keybinding/mob/drop_item_specific
+	hotkey_keys = list("CtrlX")
+	name = "drop_item_specific"
+	full_name = "Drop Item (Specific)"
+	description = "Drops the item in your active where your mouse cursor is, if in range."
+	keybind_signal = COMSIG_KB_MOB_DROPITEM_DOWN
+
+/datum/keybinding/mob/drop_item_specific/down(client/user, turf/target, mousepos_x, mousepos_y)
+	. = ..()
+	if(.)
+		return
+	if(iscyborg(user.mob)) //cyborgs can't drop items
+		return FALSE
+	var/mob/user_mob = user.mob
+	var/obj/item/item_dropped = user_mob.get_active_held_item()
+	if(!item_dropped)
+		to_chat(user, span_warning("You have nothing to drop in your hand!"))
+		return TRUE
+	if(!user_mob.Adjacent(target) || target.is_blocked_turf(source_atom = item_dropped))
+		return TRUE
+	var/x_value = (mousepos_x >= 0) ? mousepos_x - ICON_SIZE_X / 2 : mousepos_x + ICON_SIZE_X / 2
+	var/y_value = (mousepos_y >= 0) ? mousepos_y - ICON_SIZE_Y / 2 : mousepos_y + ICON_SIZE_Y / 2
+	user_mob.transfer_item_to_turf(item_dropped, target, x_value, y_value)
+	return TRUE
+
+/datum/keybinding/mob/target/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return .
@@ -210,7 +235,7 @@
 	description = "Prevents you from moving"
 	keybind_signal = COMSIG_KB_MOB_BLOCKMOVEMENT_DOWN
 
-/datum/keybinding/mob/prevent_movement/down(client/user, turf/target)
+/datum/keybinding/mob/prevent_movement/down(client/user, turf/target, mousepos_x, mousepos_y)
 	. = ..()
 	if(.)
 		return
@@ -229,33 +254,3 @@
 	description = "Hold down to see all the commands you can give your pets!"
 	keybind_signal = COMSIG_KB_LIVING_VIEW_PET_COMMANDS
 	can_reuse_keybind = TRUE
-
-/datum/keybinding/mob/show_names
-	hotkey_keys = list("Shift")
-	name = "show_name_tags"
-	full_name = "Show name tags"
-	description = "Lets you see people's names below their body."
-	keybind_signal = COMSIG_KB_MOB_SHOW_NAME_TAGS_DOWN
-	can_reuse_keybind = TRUE
-
-/datum/keybinding/mob/show_names/down(client/user)
-	. = ..()
-	if(.)
-		return
-	var/mob/living/living_mob = user.mob
-	if(istype(living_mob) && living_mob.has_quirk(/datum/quirk/prosopagnosia))
-		return
-	if(COOLDOWN_FINISHED(user, update_nametag_cooldown))
-		for(var/mob/living/living in view(user.view, user.mob))
-			living.update_name_tag()
-		COOLDOWN_START(user, update_nametag_cooldown, 1 SECONDS)
-
-	for(var/atom/movable/screen/plane_master/name_tags/name_tag as anything in user.mob?.hud_used.get_true_plane_masters(PLANE_NAME_TAGS))
-		name_tag.alpha = 255
-
-/datum/keybinding/mob/show_names/up(client/user)
-	. = ..()
-	if(.)
-		return
-	for(var/atom/movable/screen/plane_master/name_tags/name_tag as anything in user.mob?.hud_used.get_true_plane_masters(PLANE_NAME_TAGS))
-		name_tag.alpha = 0

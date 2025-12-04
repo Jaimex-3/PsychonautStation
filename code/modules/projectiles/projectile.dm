@@ -8,6 +8,7 @@
 	name = "projectile"
 	icon = 'icons/obj/weapons/guns/projectiles.dmi'
 	icon_state = "bullet"
+	abstract_type = /obj/projectile
 	density = FALSE
 	anchored = TRUE
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
@@ -103,6 +104,8 @@
 
 	/// How many tiles we pass in a single SSprojectiles tick
 	var/speed = 1.25
+
+	var/speed_multiplier = 1
 
 	/// The current angle of the projectile. Initially null, so if the arg is missing from [/fire()], we can calculate it from firer and target as fallback.
 	var/angle
@@ -634,6 +637,8 @@
 			var/mob/living/living_target = target
 			living_target.block_projectile_effects()
 		return FALSE
+	if(HAS_TRAIT(target, TRAIT_UNHITTABLE_BY_LASERS) && (armor_flag & LASER))
+		return FALSE
 	if(!ignore_source_check && firer && !direct_target)
 		if(target == firer || (target == firer.loc && ismecha(firer.loc)) || (target in firer.buckled_mobs))
 			return FALSE
@@ -933,7 +938,7 @@
 /obj/projectile/proc/process_movement(pixels_to_move, hitscan = FALSE, tile_limit = FALSE)
 	if (!isturf(loc) || !movement_vector)
 		return 0
-	var/total_move_distance = pixels_to_move
+	var/total_move_distance = pixels_to_move * speed_multiplier
 	var/movements_done = 0
 	last_projectile_move = world.time
 	while (pixels_to_move > 0 && isturf(loc) && !QDELETED(src) && !deletion_queued)

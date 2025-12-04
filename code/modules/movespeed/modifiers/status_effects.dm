@@ -23,7 +23,7 @@
 	multiplicative_slowdown = 4
 
 /datum/movespeed_modifier/status_effect/lobster_rush
-	multiplicative_slowdown = -0.5
+	multiplicative_slowdown = -0.2
 	blacklisted_movetypes = (FLYING|FLOATING)
 
 /datum/movespeed_modifier/status_effect/brimdust_concussion
@@ -75,3 +75,7 @@
 ///speed malus given by the fish organ set when dry
 /datum/movespeed_modifier/fish_waterless
 	multiplicative_slowdown = 0.36
+
+// Sandevistan
+/datum/movespeed_modifier/status_effect/sandevistan
+	multiplicative_slowdown = -0.25

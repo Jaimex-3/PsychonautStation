@@ -26,7 +26,7 @@
 	midround_type = HEAVY_MIDROUND
 	false_alarm_able = TRUE
 	ruleset_flags = RULESET_INVADER
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 0,
 		DYNAMIC_TIER_MEDIUMHIGH = 1,
@@ -34,6 +34,8 @@
 	)
 	min_pop = 30
 	min_antag_cap = 0
+	track = EVENT_TRACK_ROLESET
+	tags = list(TAG_COMBAT, TAG_TEAM_ANTAG, TAG_OUTSIDER_ANTAG)
 	/// Determines how many eggs to create - can take a formula like antag_cap
 	var/egg_count = 2
 
@@ -67,6 +69,8 @@
 	weight = 3
 	min_pop = 15
 	min_antag_cap = 0 // ship will spawn if there are no ghosts around
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_COMBAT, TAG_TEAM_ANTAG, TAG_OUTSIDER_ANTAG)
 
 	/// Pool to pick pirates from
 	var/list/datum/pirate_gang/pirate_pool
@@ -96,6 +100,7 @@
 	weight = 3
 	min_pop = 25
 	min_antag_cap = 0 // ship will spawn if there are no ghosts around
+	track = EVENT_TRACK_MAJOR
 
 /datum/dynamic_ruleset/midround/pirates/heavy/default_pirate_pool()
 	return GLOB.heavy_pirate_gangs
@@ -271,7 +276,7 @@
 	pref_flag = ROLE_WIZARD_MIDROUND
 	jobban_flag = ROLE_WIZARD
 	ruleset_flags = RULESET_INVADER|RULESET_HIGH_IMPACT
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 0,
 		DYNAMIC_TIER_MEDIUMHIGH = 1,
@@ -281,6 +286,8 @@
 	max_antag_cap = 1
 	ruleset_lazy_templates = list(LAZY_TEMPLATE_KEY_WIZARDDEN)
 	signup_atom_appearance = /obj/item/clothing/head/wizard
+	track = EVENT_TRACK_MAJOR
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_MAGICAL)
 
 /datum/dynamic_ruleset/midround/from_ghosts/wizard/assign_role(datum/mind/candidate)
 	candidate.add_antag_datum(/datum/antagonist/wizard) // moves to lair for us
@@ -294,7 +301,7 @@
 	pref_flag = ROLE_OPERATIVE_MIDROUND
 	jobban_flag = ROLE_OPERATIVE
 	ruleset_flags = RULESET_INVADER|RULESET_HIGH_IMPACT
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 1,
 		DYNAMIC_TIER_MEDIUMHIGH = 3,
@@ -305,6 +312,8 @@
 	repeatable = FALSE
 	ruleset_lazy_templates = list(LAZY_TEMPLATE_KEY_NUKIEBASE)
 	signup_atom_appearance = /obj/machinery/nuclearbomb/syndicate
+	track = EVENT_TRACK_MAJOR
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_TEAM_ANTAG, TAG_DESTRUCTIVE, TAG_EXTERNAL)
 
 /datum/dynamic_ruleset/midround/from_ghosts/nukies/create_execute_args()
 	return list(
@@ -378,7 +387,7 @@
 	false_alarm_able = TRUE
 	pref_flag = ROLE_BLOB
 	ruleset_flags = RULESET_INVADER
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 1,
 		DYNAMIC_TIER_MEDIUMHIGH = 3,
@@ -388,6 +397,9 @@
 	max_antag_cap = 1
 	repeatable_weight_decrease = 3
 	signup_atom_appearance = /obj/structure/blob/normal
+	track = EVENT_TRACK_MAJOR
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_DESTRUCTIVE)
+
 	/// How many points does the blob spawn with
 	var/starting_points = OVERMIND_STARTING_POINTS
 
@@ -407,6 +419,9 @@
 /datum/dynamic_ruleset/midround/from_ghosts/blob/false_alarm()
 	priority_announce("Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Biohazard Alert", ANNOUNCER_OUTBREAK5)
 
+	// Set status displays to biohazard alert even for false alarm
+	send_status_display_biohazard_alert()
+
 /datum/dynamic_ruleset/midround/from_ghosts/xenomorph
 	name = "Alien Infestation"
 	config_tag = "Xenomorph"
@@ -415,7 +430,7 @@
 	false_alarm_able = TRUE
 	pref_flag = ROLE_ALIEN
 	ruleset_flags = RULESET_INVADER
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 1,
 		DYNAMIC_TIER_MEDIUMHIGH = 5,
@@ -426,6 +441,8 @@
 	min_antag_cap = 1
 	repeatable_weight_decrease = 3
 	signup_atom_appearance = /mob/living/basic/alien
+	track = EVENT_TRACK_ROLESET
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_ALIEN)
 
 /datum/dynamic_ruleset/midround/from_ghosts/xenomorph/New(list/dynamic_config)
 	. = ..()
@@ -484,6 +501,8 @@
 	min_pop = 15
 	max_antag_cap = 1
 	signup_atom_appearance = /obj/item/light_eater
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_SPOOKY)
 
 /datum/dynamic_ruleset/midround/from_ghosts/nightmare/can_be_selected()
 	return ..() && !isnull(find_maintenance_spawn(atmos_sensitive = TRUE, require_darkness = TRUE))
@@ -502,7 +521,7 @@
 	false_alarm_able = TRUE
 	pref_flag = ROLE_SPACE_DRAGON
 	ruleset_flags = RULESET_INVADER
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 3,
 		DYNAMIC_TIER_MEDIUMHIGH = 5,
@@ -512,6 +531,8 @@
 	max_antag_cap = 1
 	repeatable_weight_decrease = 3
 	signup_atom_appearance = /mob/living/basic/space_dragon
+	track = EVENT_TRACK_ROLESET
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_DESTRUCTIVE)
 
 /datum/dynamic_ruleset/midround/from_ghosts/space_dragon/can_be_selected()
 	return ..() && !isnull(find_space_spawn())
@@ -547,6 +568,8 @@
 	repeatable_weight_decrease = 3
 	ruleset_lazy_templates = list(LAZY_TEMPLATE_KEY_ABDUCTOR_SHIPS)
 	signup_atom_appearance = /obj/item/melee/baton/abductor
+	track = EVENT_TRACK_MAJOR
+	tags = list(TAG_OUTSIDER_ANTAG, TAG_ALIEN, TAG_TEAM_ANTAG)
 
 /datum/dynamic_ruleset/midround/from_ghosts/abductors/can_be_selected()
 	if(!..())
@@ -572,7 +595,7 @@
 	midround_type = HEAVY_MIDROUND
 	pref_flag = ROLE_NINJA
 	ruleset_flags = RULESET_INVADER
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 0,
 		DYNAMIC_TIER_MEDIUMHIGH = 1,
@@ -583,6 +606,8 @@
 	repeatable = FALSE
 	ruleset_lazy_templates = list(LAZY_TEMPLATE_KEY_NINJA_HOLDING_FACILITY)
 	signup_atom_appearance = /obj/item/energy_katana
+	track = EVENT_TRACK_ROLESET
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_EXTERNAL)
 
 /datum/dynamic_ruleset/midround/from_ghosts/space_ninja/can_be_selected()
 	return ..() && !isnull(find_space_spawn())
@@ -609,6 +634,9 @@
 	max_antag_cap = 1
 	repeatable = FALSE
 	signup_atom_appearance = /mob/living/basic/revenant
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_OUTSIDER_ANTAG, TAG_SPOOKY)
+
 	/// There must be this many dead mobs on the station for a revenant to spawn (of all mob types, not just humans)
 	/// Remember there's usually 2-3 that spawn in the Morgue roundstart, so adjust this accordingly
 	var/required_station_corpses = 10
@@ -655,17 +683,35 @@
 	candidate_role = "Changeling"
 	pref_flag = ROLE_CHANGELING_MIDROUND
 	jobban_flag = ROLE_CHANGELING
-	ruleset_flags = RULESET_INVADER
+	ruleset_flags = RULESET_INVADER|RULESET_VARIATION
 	weight = 5
 	min_pop = 15
 	max_antag_cap = 1
 	signup_atom_appearance = /obj/effect/meteor/meaty/changeling
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_ALIEN)
 
 /datum/dynamic_ruleset/midround/from_ghosts/space_changeling/create_ruleset_body()
 	return // handled by generate_changeling_meteor() entirely
 
 /datum/dynamic_ruleset/midround/from_ghosts/space_changeling/assign_role(datum/mind/candidate)
 	generate_changeling_meteor(candidate)
+
+/datum/dynamic_ruleset/midround/from_ghosts/space_changeling/mass
+	name = "Mass Space Changelings"
+	config_tag = "Mass Changelings"
+	midround_type = HEAVY_MIDROUND
+	min_pop = 25
+	min_antag_cap = 2
+	max_antag_cap = 3
+	repeatable_weight_decrease = 4
+	weight = alist(
+		DYNAMIC_TIER_LOW = 0,
+		DYNAMIC_TIER_LOWMEDIUM = 3,
+		DYNAMIC_TIER_MEDIUMHIGH = 4,
+		DYNAMIC_TIER_HIGH = 5,
+	)
+	track = EVENT_TRACK_MAJOR
 
 /datum/dynamic_ruleset/midround/from_ghosts/paradox_clone
 	name = "Paradox Clone"
@@ -678,21 +724,30 @@
 	min_pop = 10
 	max_antag_cap = 1
 	signup_atom_appearance = /obj/effect/bluespace_stream
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_TARGETED)
+	/// Chance of getting another clone for the price of free
+	var/bonus_clone_chance = 20
+
+/datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/New(list/dynamic_config)
+	. = ..()
+	max_antag_cap += prob(bonus_clone_chance)
 
 /datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/can_be_selected()
 	return ..() && !isnull(find_clone()) && !isnull(find_maintenance_spawn(atmos_sensitive = TRUE, require_darkness = FALSE))
 
+/datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/create_execute_args()
+	return list(find_clone())
+
 /datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/create_ruleset_body()
 	return // handled by assign_role() entirely
 
-/datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/assign_role(datum/mind/candidate)
-	var/mob/living/carbon/human/good_version = find_clone()
+/datum/dynamic_ruleset/midround/from_ghosts/paradox_clone/assign_role(datum/mind/candidate, mob/living/carbon/human/good_version)
 	var/mob/living/carbon/human/bad_version = good_version.make_full_human_copy(find_maintenance_spawn(atmos_sensitive = TRUE, require_darkness = FALSE))
 	candidate.transfer_to(bad_version, force_key_move = TRUE)
 
 	var/datum/antagonist/paradox_clone/antag = candidate.add_antag_datum(/datum/antagonist/paradox_clone)
-	antag.original_ref = WEAKREF(good_version.mind)
-	antag.setup_clone()
+	antag.setup_clone(good_version.mind)
 
 	playsound(bad_version, 'sound/items/weapons/zapbang.ogg', 30, TRUE)
 	bad_version.put_in_hands(new /obj/item/storage/toolbox/mechanical()) //so they dont get stuck in maints
@@ -725,6 +780,8 @@
 	max_antag_cap = 1
 	ruleset_lazy_templates = list(LAZY_TEMPLATE_KEY_VOIDWALKER_VOID)
 	signup_atom_appearance = /obj/item/clothing/head/helmet/skull/cosmic
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG, TAG_SPOOKY, TAG_MAGICAL)
 
 /datum/dynamic_ruleset/midround/from_ghosts/voidwalker/can_be_selected()
 	return ..() && !SSmapping.is_planetary() && !isnull(find_space_spawn())
@@ -750,6 +807,9 @@
 	min_antag_cap = 3
 	repeatable = FALSE
 	signup_atom_appearance = /obj/item/card/id/advanced/prisoner
+	track = EVENT_TRACK_MUNDANE
+	tags = list(TAG_COMBAT, TAG_OUTSIDER_ANTAG)
+
 	/// What backstory is the fugitive(s)?
 	VAR_FINAL/fugitive_backstory
 	/// What backstory is the hunter(s)?
@@ -830,7 +890,7 @@
 		HUNTER_PACK_MI13,
 	)
 	. = ..()
-	addtimer(CALLBACK(src, PROC_REF(check_spawn_hunters), hunter_backstory, 10 MINUTES), 1 MINUTES)
+	addtimer(CALLBACK(src, PROC_REF(check_spawn_hunters), 10 MINUTES), 1 MINUTES)
 
 /datum/dynamic_ruleset/midround/from_ghosts/fugitives/assign_role(datum/mind/candidate, datum/team/fugitive/team, turf/team_spawn)
 	candidate.current.forceMove(team_spawn)
@@ -966,6 +1026,8 @@
 	weight = 0
 	max_antag_cap = 1
 	signup_atom_appearance = /mob/living/basic/morph
+	track = EVENT_TRACK_MUNDANE
+	tags = list(TAG_OUTSIDER_ANTAG, TAG_MAGICAL)
 
 /datum/dynamic_ruleset/midround/from_ghosts/morph/can_be_selected()
 	return ..() && !isnull(find_maintenance_spawn(atmos_sensitive = TRUE, require_darkness = FALSE))
@@ -989,6 +1051,8 @@
 	min_pop = 20
 	max_antag_cap = 1
 	signup_atom_appearance = /mob/living/basic/demon/slaughter
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_OUTSIDER_ANTAG, TAG_MAGICAL, TAG_SPOOKY)
 
 /datum/dynamic_ruleset/midround/from_ghosts/slaughter_demon/can_be_selected()
 	return ..() && !isnull(find_space_spawn())
@@ -1054,11 +1118,14 @@
 	false_alarm_able = TRUE
 	pref_flag = ROLE_SLEEPER_AGENT
 	jobban_flag = ROLE_TRAITOR
+	ruleset_flags = RULESET_VARIATION
 	weight = 10
 	min_pop = 3
 	blacklisted_roles = list(
 		JOB_HEAD_OF_PERSONNEL,
 	)
+	track = EVENT_TRACK_MUNDANE
+	tags = list(TAG_COMBAT, TAG_CREW_ANTAG)
 
 /datum/dynamic_ruleset/midround/from_living/traitor/assign_role(datum/mind/candidate)
 	candidate.add_antag_datum(/datum/antagonist/traitor)
@@ -1069,6 +1136,23 @@
 		"[command_name()] High-Priority Update",
 	)
 
+/datum/dynamic_ruleset/midround/from_living/traitor/mass
+	name = "Mass Traitors"
+	config_tag = "Mass Traitors"
+	midround_type = HEAVY_MIDROUND
+	min_pop = 15
+	min_antag_cap = 2
+	max_antag_cap = 4
+	repeatable_weight_decrease = 8
+	blacklisted_roles = list()
+	weight = alist(
+		DYNAMIC_TIER_LOW = 0,
+		DYNAMIC_TIER_LOWMEDIUM = 3,
+		DYNAMIC_TIER_MEDIUMHIGH = 8,
+		DYNAMIC_TIER_HIGH = 10,
+	)
+	track = EVENT_TRACK_MAJOR
+
 /datum/dynamic_ruleset/midround/from_living/malf_ai
 	name = "Malfunctioning AI"
 	config_tag = "Midround Malfunctioning AI"
@@ -1077,7 +1161,7 @@
 	pref_flag = ROLE_MALF_MIDROUND
 	jobban_flag = ROLE_MALF
 	ruleset_flags = RULESET_HIGH_IMPACT
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 1,
 		DYNAMIC_TIER_MEDIUMHIGH = 3,
@@ -1085,6 +1169,8 @@
 	)
 	min_pop = 30
 	repeatable = FALSE
+	track = EVENT_TRACK_MAJOR
+	tags = list(TAG_CREW_ANTAG, TAG_DESTRUCTIVE)
 
 /datum/dynamic_ruleset/midround/from_living/malf_ai/get_always_blacklisted_roles()
 	return list()
@@ -1105,7 +1191,7 @@
 	midround_type = HEAVY_MIDROUND
 	pref_flag = ROLE_BLOB_INFECTION
 	jobban_flag = ROLE_BLOB
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 0,
 		DYNAMIC_TIER_LOWMEDIUM = 1,
 		DYNAMIC_TIER_MEDIUMHIGH = 3,
@@ -1113,6 +1199,8 @@
 	)
 	min_pop = 30
 	repeatable_weight_decrease = 3
+	track = EVENT_TRACK_ROLESET
+	tags = list(TAG_COMBAT, TAG_CREW_ANTAG, TAG_DESTRUCTIVE)
 
 /datum/dynamic_ruleset/midround/from_living/blob/assign_role(datum/mind/candidate)
 	candidate.add_antag_datum(/datum/antagonist/blob/infection)
@@ -1129,13 +1217,15 @@
 	midround_type = LIGHT_MIDROUND
 	pref_flag = ROLE_OBSESSED
 	blacklisted_roles = list()
-	weight = list(
+	weight = alist(
 		DYNAMIC_TIER_LOW = 5,
 		DYNAMIC_TIER_LOWMEDIUM = 5,
 		DYNAMIC_TIER_MEDIUMHIGH = 3,
 		DYNAMIC_TIER_HIGH = 1,
 	)
 	min_pop = 5
+	track = EVENT_TRACK_MUNDANE
+	tags = list(TAG_COMBAT, TAG_CREW_ANTAG, TAG_TARGETED)
 
 /datum/dynamic_ruleset/midround/from_living/obsesed/is_valid_candidate(mob/candidate, client/candidate_client)
 	return ..() && !!candidate.get_organ_by_type(/obj/item/organ/brain)

@@ -34,6 +34,8 @@
 	min_wizard_trigger_potency = 2
 	max_wizard_trigger_potency = 6
 	admin_setup = list(/datum/event_admin_setup/minimum_candidate_requirement/disease_outbreak, /datum/event_admin_setup/listed_options/disease_outbreak)
+	track = EVENT_TRACK_MODERATE
+	tags = list(TAG_TARGETED, TAG_COMMUNAL, TAG_EXTERNAL, TAG_ALIEN)
 	///Disease recipient candidates
 	var/list/disease_candidates = list()
 
@@ -121,6 +123,9 @@
 		var/datum/disease/fake_virus = pick(virus_candidates)
 		illness_type = initial(fake_virus.name)
 	priority_announce("[locale_suffix_locative(station_name())] 7. seviye biyolojik salgın olduğu doğrulandı. Tüm personeller salgını kontrol altına almalıdır.", "[illness_type] Uyarısı", ANNOUNCER_OUTBREAK7)
+
+	// Set status displays to biohazard alert
+	send_status_display_biohazard_alert()
 
 /datum/round_event/disease_outbreak/setup()
 	announce_when = ADV_ANNOUNCE_DELAY

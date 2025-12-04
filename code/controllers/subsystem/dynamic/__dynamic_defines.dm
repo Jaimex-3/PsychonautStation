@@ -22,6 +22,10 @@
 #define EXECUTION_COOLDOWN_LOW "execution_cooldown_low"
 /// Upper end for cooldown duration for a ruleset type
 #define EXECUTION_COOLDOWN_HIGH "execution_cooldown_high"
+/// Lower end for cooldown duration multiplier for storyteller
+#define EXECUTION_MULTIPLIER_LOW "execution_multiplier_low"
+/// Upper end for cooldown duration multiplier for storyteller
+#define EXECUTION_MULTIPLIER_HIGH "execution_multiplier_high"
 
 // Tiers, don't change these randomly
 /// Tier 0, no antags at all
@@ -43,6 +47,9 @@
 /// Ruleset can be configured by admins (implements /proc/configure_ruleset)
 /// Only implemented for midrounds currently
 #define RULESET_ADMIN_CONFIGURABLE (1<<2)
+/// Applied to rulesets which intentionally share a pref_flag with another rulesets
+/// Denotes multiple rulesets which abide by the same preference, but are each a variation of some base ruleset
+#define RULESET_VARIATION (1<<3)
 
 /// Href for cancelling midround rulesets before execution
 #define MIDROUND_CANCEL_HREF(...) "(<a href='byond://?src=[REF(src)];admin_cancel_midround=[REF(picked_ruleset)]'>CANCEL</a>)"

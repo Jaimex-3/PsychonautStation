@@ -490,6 +490,15 @@
 	default = 6
 	min_val = -1
 
+/// Freebie quirk points. Can't go negative because we have no way of enforcing a person has a quirk before they join.
+/datum/config_entry/number/default_quirk_points
+	default = 2
+	min_val = 0
+
+/// Max personalities you can have at once
+/datum/config_entry/number/max_personalities
+	default = 5
+
 /**
  * A config that skews with the random spawners weights
  * If the value is lower than 1, it'll tend to even out the odds
@@ -512,3 +521,14 @@
 /datum/config_entry/keyed_list/modular_room_weight
 	key_mode = KEY_MODE_TEXT
 	value_mode = VALUE_MODE_NUM
+
+/datum/config_entry/flag/enable_storyteller
+
+/datum/config_entry/flag/public_storyteller
+
+/datum/config_entry/flag/auto_vote_storyteller
+
+/datum/config_entry/flag/allow_storyteller_vote
+
+/datum/config_entry/string/default_storyteller
+	default = "Random"

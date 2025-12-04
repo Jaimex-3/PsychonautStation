@@ -1,4 +1,5 @@
 /obj/item/antag_spawner
+	abstract_type = /obj/item/antag_spawner
 	throw_speed = 1
 	throw_range = 5
 	w_class = WEIGHT_CLASS_TINY
@@ -245,7 +246,6 @@
 	borg.mmi.brainmob.real_name = brainopsname
 	borg.mmi.brainmob.name = brainopsname
 	borg.real_name = borg.name
-	borg.update_name_tag()
 
 	borg.PossessByPlayer(C.key)
 

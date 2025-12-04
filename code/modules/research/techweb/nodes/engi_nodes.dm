@@ -59,7 +59,7 @@
 		"hyper_cell",
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_3_POINTS)
-	required_experiments = list(/datum/experiment/scanning/points/machinery_tiered_scan/tier2_any)
+	discount_experiments = list(/datum/experiment/scanning/points/machinery_tiered_scan/tier2_any = TECHWEB_TIER_3_POINTS)
 	announce_channels = list(RADIO_CHANNEL_ENGINEERING)
 
 
@@ -219,7 +219,6 @@
 		"holobarrier_jani",
 		"holobarrier_med",
 		"holopad",
-		"vendatray",
 		"holodisk",
 		"modular_shield_gate",
 		"modular_shield_generator",
@@ -248,6 +247,7 @@
 		"ci-medhud",
 		"ci-diaghud",
 		"ci-sechud",
+		"ci-scihud",
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_3_POINTS)
 	announce_channels = list(RADIO_CHANNEL_ENGINEERING, RADIO_CHANNEL_SECURITY, RADIO_CHANNEL_SCIENCE, RADIO_CHANNEL_MEDICAL)

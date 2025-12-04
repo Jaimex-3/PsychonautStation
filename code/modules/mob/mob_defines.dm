@@ -9,6 +9,7 @@
 /mob
 	density = TRUE
 	layer = MOB_LAYER
+	abstract_type = /mob
 	animate_movement = SLIDE_STEPS
 	hud_possible = list(ANTAG_HUD)
 	pressure_resistance = 8
@@ -215,6 +216,3 @@
 
 	/// A ref of the area we're taking our ambient loop from.
 	var/area/ambience_tracked_area
-
-	var/obj/effect/abstract/name_tag/name_tag
-	var/atom/movable/screen/name_shadow/name_tag_shadow

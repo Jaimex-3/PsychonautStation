@@ -87,9 +87,9 @@ Regenerative extracts:
 
 /obj/item/slimecross/regenerative/yellow/core_effect(mob/living/target, mob/user)
 	var/list/batteries = list()
-	for(var/obj/item/stock_parts/power_store/C in target.get_all_contents())
-		if(C.charge < C.maxcharge)
-			batteries += C
+	for(var/obj/item/stock_parts/power_store/cell in assoc_to_values(target.get_all_cells()))
+		if(cell.charge < cell.maxcharge)
+			batteries += cell
 	if(batteries.len)
 		var/obj/item/stock_parts/power_store/ToCharge = pick(batteries)
 		ToCharge.charge = ToCharge.maxcharge
@@ -252,7 +252,6 @@ Regenerative extracts:
 		var/mob/living/carbon/carbon_target = target
 		var/mob/living/carbon/carbon_dummy = dummy
 		carbon_dummy.real_name = carbon_target.real_name
-		carbon_dummy.update_name_tag()
 		carbon_target.dna.copy_dna(carbon_dummy.dna, COPY_DNA_SE|COPY_DNA_SPECIES)
 		carbon_dummy.updateappearance(mutcolor_update = TRUE)
 	dummy.adjustBruteLoss(target.getBruteLoss())

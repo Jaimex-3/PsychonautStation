@@ -36,7 +36,6 @@
 	new_dna.copy_dna(transforming.dna, COPY_DNA_SPECIES)
 	transforming.real_name = new_dna.real_name
 	transforming.name = transforming.get_visible_name()
-	transforming.update_name_tag()
 	transforming.updateappearance(mutcolor_update = TRUE)
 	transforming.domutcheck()
 	return TRUE
@@ -83,10 +82,10 @@
 		if(duration == STATUS_EFFECT_PERMANENT)
 			return // Already paused
 
-		time_before_pause = duration - world.time
+		time_before_pause = duration
 		duration = STATUS_EFFECT_PERMANENT
 
 	// Resume if we're none of the above and also were paused
 	else if(time_before_pause != -1)
-		duration = time_before_pause + world.time
+		duration = time_before_pause
 		time_before_pause = -1

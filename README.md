@@ -9,11 +9,11 @@
 
 | Website                    | Link                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Website                    | [https://tr.ss13.org](https://tr.ss13.org)                                                                         |
+| Website                    | [https://ss13.tr](https://ss13.tr)                                                                                 |
 | Code                       | [https://github.com/psychonaut-station/PsychonautStation](https://github.com/psychonaut-station/PsychonautStation) |
-| Wiki                       | [https://wiki.ss13.org/Anasayfa](https://wiki.ss13.org/Anasayfa)                                                   |
+| Wiki                       | [https://wiki.ss13.tr/Anasayfa](https://wiki.ss13.tr/Anasayfa)                                                     |
 | Codedocs                   | [https://codedocs.tgstation13.org/](https://codedocs.tgstation13.org/)                                             |
-| Psychonaut Station Discord | [https://tr.ss13.org/discord](https://tr.ss13.org/discord)                                                         |
+| Psychonaut Station Discord | [https://ss13.tr/discord](https://ss13.tr/discord)                                                                 |
 | Coderbus Discord           | [https://discord.gg/Vh8TJp9](https://discord.gg/Vh8TJp9)                                                           |
 
 This is the codebase for the Psychonaut Station flavoured fork of /tg/station which is another fork of SpaceStation 13.
@@ -40,9 +40,9 @@ Space Station 13 is a paranoia-laden round-based roleplaying game set against th
 
 ## LICENSE
 
-All code after [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/31/12 at 4:38 PM PST](https://github.com/psychonaut-station/PsychonautStation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html).
+All code after [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/12/31 at 4:38 PM PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html).
 
-All code before [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/31/12 at 4:38 PM PST](https://github.com/psychonaut-station/PsychonautStation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
+All code before [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/12/31 at 4:38 PM PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
 (Including tools unless their readme specifies otherwise.)
 
 See LICENSE and GPLv3.txt for more details.
