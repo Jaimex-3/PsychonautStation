@@ -357,99 +357,59 @@
 // Time Anomaly Reactive Armor
 /obj/item/clothing/suit/armor/reactive/time
 	name = "reactive time armor"
-	desc = "An experimental suit of armor that distorts time when struck."
-	emp_message = span_warning("The reactive time armor's chronofield emitters are scrambled!")
+	desc = "An experimental suit of armor that detonates a short-lived chronofield when struck, slowing nearby threats while the wearer surges forward."
+	emp_message = span_warning("The reactive time armor's chronofield emitters are scrambled and fighting you!")
 	cooldown_message = span_danger("The time field is still recharging! It fails to activate!")
-	/// List storing the wearer's position history
-	var/list/position_history = list()
-	/// Maximum number of positions to store (100 ticks = 10 seconds)
-	var/max_history_length = 100
-	/// When we last updated position history
-	var/last_history_update = 0
-
-/obj/item/clothing/suit/armor/reactive/time/Initialize(mapload)
-	. = ..()
-	START_PROCESSING(SSfastprocess, src)
-
-/obj/item/clothing/suit/armor/reactive/time/Destroy()
-	STOP_PROCESSING(SSfastprocess, src)
-	return ..()
-
-/obj/item/clothing/suit/armor/reactive/time/process()
-	if(!istype(loc, /mob/living/carbon/human))
-		return
-
-	var/mob/living/carbon/human/wearer = loc
-	if(istype(wearer) && world.time > last_history_update)
-		// Store current position with timestamp
-		var/list/position_data = list("turf" = get_turf(wearer), "time" = world.time)
-		position_history[++position_history.len] = position_data
-
-		// Remove old positions beyond our history limit
-		if(position_history.len > max_history_length)
-			position_history.Cut(1, 2)
-
-		last_history_update = world.time
+	/// Radius of the chronofield
+	var/field_radius = 4
+	/// Duration of the chronofield effects
+	var/field_duration = 3 SECONDS
+	/// How much the wearer speeds up inside their own field
+	var/owner_speed_boost = -0.35
+	/// How much everyone else is slowed by the field
+	var/enemy_slow_amount = 0.8
+	/// Cooldown tuned around strong area control
+	reactivearmor_cooldown_duration = 45 SECONDS
 
 /obj/item/clothing/suit/armor/reactive/time/reactive_activation(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	var/turf/current_turf = get_turf(owner)
 	if(!current_turf)
 		return FALSE
+	owner.visible_message(span_danger("[src] fractures time around [owner], dragging everyone nearby into slow motion!"))
+	playsound(current_turf, 'sound/effects/magic/timeparadox2.ogg', 65, TRUE)
 
-	// Find position from 10 seconds ago (100 ticks ago)
-	var/target_time = world.time - 100
-	var/turf/time_travel_destination = null
+	new /obj/effect/temp_visual/time_effect(current_turf)
+	new /obj/effect/temp_visual/circle_wave/gravity(current_turf)
 
-	// Search through position history for the closest position to 10 seconds ago
-	for(var/i = position_history.len; i >= 1; i--)
-		var/list/position_data = position_history[i]
-		if(position_data["time"] <= target_time)
-			time_travel_destination = position_data["turf"]
-			break
+	// Speed up the wearer while the field is active
+	owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/boost, multiplicative_slowdown = owner_speed_boost)
+	addtimer(CALLBACK(src, PROC_REF(clear_time_field_buff), owner), field_duration)
 
-	// If we don't have enough history, use the oldest position we have
-	if(!time_travel_destination && position_history.len > 0)
-		var/list/oldest_position = position_history[1]
-		time_travel_destination = oldest_position["turf"]
+	// Slow everything else caught in the field
+	var/list/slowed_targets = list()
+	for(var/mob/living/target in range(field_radius, current_turf))
+		if(target == owner)
+			continue
+		target.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/slow, multiplicative_slowdown = enemy_slow_amount)
+		slowed_targets += target
 
-	if(!time_travel_destination || !isturf(time_travel_destination))
-		owner.visible_message(span_danger("[src] fails to find a temporal anchor point!"))
-		reactivearmor_cooldown = world.time + reactivearmor_cooldown_duration
-		return TRUE
+	if(slowed_targets.len)
+		addtimer(CALLBACK(src, PROC_REF(clear_time_field_slows), slowed_targets), field_duration)
 
-	// Directly freeze the character instead of relying on turf timestop
-	owner.Stun(20, ignore_canstun = TRUE) // 2 seconds of stunning
-	owner.add_atom_colour(COLOR_MATRIX_INVERT, TEMPORARY_COLOUR_PRIORITY) // Visual time effect
-	ADD_TRAIT(owner, TRAIT_GODMODE, REF(src)) // Make invulnerable during time effect
-	new /obj/effect/temp_visual/time_effect(current_turf) // Time visual effect synced with stun
-
-	// Teleport after a short delay to show the time effect
-	addtimer(CALLBACK(src, PROC_REF(complete_time_travel), owner, time_travel_destination), 20)
-
-	playsound(current_turf, 'sound/effects/magic/timeparadox2.ogg', 50)
-	owner.visible_message(span_danger("[owner] flickers as [src] rewinds time in response to [attack_text]!"))
 	reactivearmor_cooldown = world.time + reactivearmor_cooldown_duration
 	return TRUE
 
-/obj/item/clothing/suit/armor/reactive/time/proc/complete_time_travel(mob/living/carbon/human/owner, turf/destination)
-	if(!owner || !destination)
+/obj/item/clothing/suit/armor/reactive/time/proc/clear_time_field_buff(mob/living/carbon/human/owner)
+	if(QDELETED(owner))
 		return
+	owner.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/boost)
+	owner.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow)
 
-	// Remove the color effect before teleporting
-	owner.remove_atom_colour(TEMPORARY_COLOUR_PRIORITY)
-	REMOVE_TRAIT(owner, TRAIT_GODMODE, REF(src)) // Remove invulnerability
-
-	var/turf/old_turf = get_turf(owner)
-	owner.forceMove(destination)
-
-	// Visual and audio effects at both locations
-	new /obj/effect/temp_visual/circle_wave/gravity(old_turf)
-	new /obj/effect/temp_visual/circle_wave/gravity(destination)
-	new /obj/effect/temp_visual/time_effect(destination) // Time effect continues at destination
-	playsound(destination, 'sound/effects/magic/timeparadox2.ogg', 75, TRUE, frequency = -1)
-
-	owner.visible_message(span_danger("[owner] materializes as time snaps back!"))
-	to_chat(owner, span_notice("You feel like you've been here before..."))
+/obj/item/clothing/suit/armor/reactive/time/proc/clear_time_field_slows(list/slowed_targets)
+	for(var/mob/living/target in slowed_targets)
+		if(QDELETED(target))
+			continue
+		target.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/slow)
 
 // Time effect visual for time reactive armor
 /obj/effect/temp_visual/time_effect
@@ -462,20 +422,33 @@
 	pixel_y = -64
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	alpha = 125
-	duration = 20 // 2 seconds
+	duration = 30 // 3 seconds
 
 /obj/item/clothing/suit/armor/reactive/time/emp_activation(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	owner.visible_message(span_danger("The reactive time system stops the time around you but leaving someone behind in the process!"))
-	owner.dropItemToGround(src, TRUE, TRUE)
-
-	// Broken sound effects
+	owner.visible_message(span_danger("[src] warps and dumps the chronofield on [owner] instead!"))
 	playsound(get_turf(owner), 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
-	playsound(get_turf(owner), 'sound/machines/defib/defib_failed.ogg', 75, TRUE)
-	playsound(get_turf(owner), 'sound/effects/magic/timeparadox2.ogg', 50, TRUE, frequency = 2) // Higher pitch broken sound
+	playsound(get_turf(owner), 'sound/effects/magic/timeparadox2.ogg', 50, TRUE, frequency = 2)
+
+	owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow, multiplicative_slowdown = enemy_slow_amount)
+	addtimer(CALLBACK(src, PROC_REF(clear_time_field_buff), owner), field_duration)
 
 	// Much longer cooldown when EMP'd (3x normal duration)
 	reactivearmor_cooldown = world.time + (reactivearmor_cooldown_duration * 3)
 	return FALSE
+
+/datum/movespeed_modifier/status_effect/reactive_time_field
+	variable = TRUE
+	priority = 50
+	blacklisted_movetypes = (FLYING|FLOATING)
+
+/datum/movespeed_modifier/status_effect/reactive_time_field/slow
+	id = "reactive_time_field_slow"
+
+/datum/movespeed_modifier/status_effect/reactive_time_field/boost
+	id = "reactive_time_field_boost"
+
+/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow
+	id = "reactive_time_field_emp_slow"
 
 //Bioscrambling
 /obj/item/clothing/suit/armor/reactive/bioscrambling
