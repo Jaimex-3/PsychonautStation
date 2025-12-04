@@ -357,59 +357,101 @@
 // Time Anomaly Reactive Armor
 /obj/item/clothing/suit/armor/reactive/time
 	name = "reactive time armor"
-	desc = "An experimental suit of armor that detonates a short-lived chronofield when struck, slowing nearby threats while the wearer surges forward."
-	emp_message = span_warning("The reactive time armor's chronofield emitters are scrambled and fighting you!")
-	cooldown_message = span_danger("The time field is still recharging! It fails to activate!")
-	/// Radius of the chronofield
-	var/field_radius = 4
-	/// Duration of the chronofield effects
-	var/field_duration = 3 SECONDS
-	/// How much the wearer speeds up inside their own field
-	var/owner_speed_boost = -0.35
-	/// How much everyone else is slowed by the field
-	var/enemy_slow_amount = 0.8
-	/// Cooldown tuned around strong area control
+	desc = "An experimental suit of armor that snaps a temporal parry when struck, reflecting fire and countering blows with a blink dash."
+	emp_message = span_warning("The reactive time armor sputters and trips your footing!")
+	cooldown_message = span_danger("The temporal parry matrix is still recharging!")
+	/// How long the parry window lasts
+	var/parry_duration = 1 SECONDS
+	/// How long to stagger melee attackers
+	var/attacker_slow_duration = 0.6 SECONDS
+	/// How far the post-parry dash travels
+	var/dash_distance = 3
+	/// Tracks when the parry window ends
+	var/parry_active_until = 0
+	/// Cooldown tuned for strong single-target defense
 	reactivearmor_cooldown_duration = 45 SECONDS
+
+/obj/item/clothing/suit/armor/reactive/time/hit_reaction(owner, hitby, attack_text, final_block_chance, damage, attack_type, damage_type = BRUTE)
+	if(parry_active_until && world.time <= parry_active_until)
+		return parry_deflect(owner, hitby, attack_text, final_block_chance, damage, attack_type)
+	return ..()
 
 /obj/item/clothing/suit/armor/reactive/time/reactive_activation(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	var/turf/current_turf = get_turf(owner)
 	if(!current_turf)
 		return FALSE
-	owner.visible_message(span_danger("[src] fractures time around [owner], dragging everyone nearby into slow motion!"))
-	playsound(current_turf, 'sound/effects/magic/timeparadox2.ogg', 65, TRUE)
+	owner.visible_message(span_danger("[src] snaps a temporal parry around [owner], freezing the incoming attack!"))
+	playsound(current_turf, 'sound/effects/magic/timeparadox2.ogg', 70, TRUE)
 
+	parry_active_until = world.time + parry_duration
+	ADD_TRAIT(owner, TRAIT_GODMODE, REF(src))
 	new /obj/effect/temp_visual/time_effect(current_turf)
-	new /obj/effect/temp_visual/circle_wave/gravity(current_turf)
 
-	// Speed up the wearer while the field is active
-	owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/boost, multiplicative_slowdown = owner_speed_boost)
-	addtimer(CALLBACK(src, PROC_REF(clear_time_field_buff), owner), field_duration)
+	// Handle the triggering attack right away
+	parry_deflect(owner, hitby, attack_text, final_block_chance, damage, attack_type)
 
-	// Slow everything else caught in the field
-	var/list/slowed_targets = list()
-	for(var/mob/living/target in range(field_radius, current_turf))
-		if(target == owner)
-			continue
-		target.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/slow, multiplicative_slowdown = enemy_slow_amount)
-		slowed_targets += target
-
-	if(slowed_targets.len)
-		addtimer(CALLBACK(src, PROC_REF(clear_time_field_slows), slowed_targets), field_duration)
+	// End the parry window and dash once the window closes
+	addtimer(CALLBACK(src, PROC_REF(end_parry_window), owner), parry_duration)
 
 	reactivearmor_cooldown = world.time + reactivearmor_cooldown_duration
 	return TRUE
 
-/obj/item/clothing/suit/armor/reactive/time/proc/clear_time_field_buff(mob/living/carbon/human/owner)
+/obj/item/clothing/suit/armor/reactive/time/proc/parry_deflect(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
+	if(istype(hitby, /obj/projectile))
+		var/obj/projectile/P = hitby
+		P.reflect(owner)
+		owner.visible_message(span_notice("[src] bends [attack_text] back through time!"))
+		return TRUE
+
+	if(isliving(hitby))
+		var/mob/living/attacker = hitby
+		attacker.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_parry_stagger, multiplicative_slowdown = 0.6)
+		addtimer(CALLBACK(src, PROC_REF(clear_parry_stagger), attacker), attacker_slow_duration)
+		owner.visible_message(span_notice("[src] catches [attack_text] and hurls the momentum back!"))
+		return TRUE
+
+	return TRUE
+
+/obj/item/clothing/suit/armor/reactive/time/proc/end_parry_window(mob/living/carbon/human/owner)
 	if(QDELETED(owner))
 		return
-	owner.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/boost)
-	owner.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow)
+	if(parry_active_until < world.time)
+		parry_active_until = 0
+	REMOVE_TRAIT(owner, TRAIT_GODMODE, REF(src))
+	execute_parry_dash(owner)
+	parry_active_until = 0
 
-/obj/item/clothing/suit/armor/reactive/time/proc/clear_time_field_slows(list/slowed_targets)
-	for(var/mob/living/target in slowed_targets)
-		if(QDELETED(target))
-			continue
-		target.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/slow)
+/obj/item/clothing/suit/armor/reactive/time/proc/execute_parry_dash(mob/living/carbon/human/owner)
+	if(QDELETED(owner))
+		return
+	var/turf/current_turf = get_turf(owner)
+	if(!current_turf)
+		return
+
+	// Leave an echo where the parry ended
+	new /obj/effect/temp_visual/time_effect(current_turf)
+
+	var/turf/target_turf = current_turf
+	for(var/i in 1 to dash_distance)
+		var/turf/next_turf = get_step(target_turf, owner.dir)
+		if(!next_turf || !next_turf.CanPass(owner, get_dir(target_turf, next_turf)))
+			break
+		var/blocked = FALSE
+		for(var/atom/movable/blocker in next_turf)
+			if(blocker.density && !blocker.CanPass(owner, get_dir(target_turf, next_turf)))
+				blocked = TRUE
+				break
+		if(blocked)
+			break
+		target_turf = next_turf
+
+	if(target_turf && target_turf != current_turf)
+		owner.forceMove(target_turf)
+
+/obj/item/clothing/suit/armor/reactive/time/proc/clear_parry_stagger(mob/living/target)
+	if(QDELETED(target))
+		return
+	target.remove_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_parry_stagger)
 
 // Time effect visual for time reactive armor
 /obj/effect/temp_visual/time_effect
@@ -422,33 +464,32 @@
 	pixel_y = -64
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	alpha = 125
-	duration = 30 // 3 seconds
+	duration = 10 // 1 second
 
 /obj/item/clothing/suit/armor/reactive/time/emp_activation(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	owner.visible_message(span_danger("[src] warps and dumps the chronofield on [owner] instead!"))
+	owner.visible_message(span_danger("[src] fizzles and trips [owner] instead!"))
 	playsound(get_turf(owner), 'sound/machines/buzz/buzz-sigh.ogg', 50, TRUE)
 	playsound(get_turf(owner), 'sound/effects/magic/timeparadox2.ogg', 50, TRUE, frequency = 2)
 
-	owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow, multiplicative_slowdown = enemy_slow_amount)
-	addtimer(CALLBACK(src, PROC_REF(clear_time_field_buff), owner), field_duration)
+	owner.Stun(10)
+	owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/status_effect/reactive_time_parry_emp_slow, multiplicative_slowdown = 0.8)
+	addtimer(CALLBACK(src, PROC_REF(clear_parry_stagger), owner), 1 SECONDS)
 
 	// Much longer cooldown when EMP'd (3x normal duration)
 	reactivearmor_cooldown = world.time + (reactivearmor_cooldown_duration * 3)
 	return FALSE
 
-/datum/movespeed_modifier/status_effect/reactive_time_field
+/datum/movespeed_modifier/status_effect/reactive_time_parry_stagger
 	variable = TRUE
 	priority = 50
 	blacklisted_movetypes = (FLYING|FLOATING)
+	id = "reactive_time_parry_stagger"
 
-/datum/movespeed_modifier/status_effect/reactive_time_field/slow
-	id = "reactive_time_field_slow"
-
-/datum/movespeed_modifier/status_effect/reactive_time_field/boost
-	id = "reactive_time_field_boost"
-
-/datum/movespeed_modifier/status_effect/reactive_time_field/emp_slow
-	id = "reactive_time_field_emp_slow"
+/datum/movespeed_modifier/status_effect/reactive_time_parry_emp_slow
+	variable = TRUE
+	priority = 50
+	blacklisted_movetypes = (FLYING|FLOATING)
+	id = "reactive_time_parry_emp_slow"
 
 //Bioscrambling
 /obj/item/clothing/suit/armor/reactive/bioscrambling
