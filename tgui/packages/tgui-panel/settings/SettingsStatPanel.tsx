@@ -10,6 +10,8 @@ import { toFixed } from 'tgui-core/math';
 import { capitalize } from 'tgui-core/string';
 import { useSettings } from './use-settings';
 
+const layoutViews = ['modern', 'classic'] as const;
+const colorThemes = ['blue', 'midnight'] as const;
 const tabViews = ['default', 'classic', 'scrollable'];
 
 function LinkedToChat() {
@@ -18,13 +20,43 @@ function LinkedToChat() {
 
 export function SettingsStatPanel(props) {
   const { settings, updateSettings } = useSettings();
-  const { statLinked, statFontSize, statTabsStyle } = settings;
+  const {
+    panelColorTheme,
+    panelLayoutStyle,
+    statLinked,
+    statFontSize,
+    statTabsStyle,
+  } = settings;
 
   return (
     <Section fill>
       <Stack fill vertical>
         <Stack.Item>
           <LabeledList>
+            <LabeledList.Item label="Panel layout" verticalAlign="middle">
+              {layoutViews.map((view) => (
+                <Button
+                  key={view}
+                  color="transparent"
+                  selected={panelLayoutStyle === view}
+                  onClick={() => updateSettings({ panelLayoutStyle: view })}
+                >
+                  {capitalize(view)}
+                </Button>
+              ))}
+            </LabeledList.Item>
+            <LabeledList.Item label="Panel colors" verticalAlign="middle">
+              {colorThemes.map((theme) => (
+                <Button
+                  key={theme}
+                  color="transparent"
+                  selected={panelColorTheme === theme}
+                  onClick={() => updateSettings({ panelColorTheme: theme })}
+                >
+                  {capitalize(theme)}
+                </Button>
+              ))}
+            </LabeledList.Item>
             <LabeledList.Item label="Tabs" verticalAlign="middle">
               {tabViews.map((view) => (
                 <Button

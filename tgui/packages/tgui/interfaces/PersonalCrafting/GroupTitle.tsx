@@ -8,11 +8,13 @@ export function GroupTitle(props: Props) {
   const { title } = props;
 
   return (
-    <Stack my={1}>
+    <Stack className="PersonalCrafting__groupTitle" my={1}>
       <Stack.Item grow>
         <Divider />
       </Stack.Item>
-      <Stack.Item color="gray">{title}</Stack.Item>
+      <Stack.Item className="PersonalCrafting__groupTitleText" color="gray">
+        {title}
+      </Stack.Item>
       <Stack.Item grow>
         <Divider />
       </Stack.Item>
@@ -24,7 +26,7 @@ export function SubGroupTitle(props: Props) {
   const { title } = props;
 
   return (
-    <Stack>
+    <Stack className="PersonalCrafting__subgroupTitle">
       <Stack.Item
         style={{
           borderBlockColor: 'label',

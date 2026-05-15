@@ -30,11 +30,15 @@ export function Panel(props) {
   useKeepAlive();
 
   return (
-    <Pane theme={settings.theme} canSuspend={false}>
+    <Pane
+      className={`Panel Panel--${settings.panelLayoutStyle} Panel--theme-${settings.panelColorTheme}`}
+      theme={settings.theme}
+      canSuspend={false}
+    >
       <Stack fill vertical>
         <Stack.Item>
-          <Section fitted>
-            <Stack mr={1} align="center">
+          <Section className="Panel__toolbar" fitted>
+            <Stack className="Panel__toolbarContent" mr={1} align="center">
               <Stack.Item grow>
                 <ChatTabs />
               </Stack.Item>
@@ -43,6 +47,7 @@ export function Panel(props) {
               </Stack.Item>
               <Stack.Item>
                 <Button
+                  className="Panel__toolbarButton"
                   color="grey"
                   selected={audioVisible}
                   icon="music"
@@ -53,6 +58,7 @@ export function Panel(props) {
               </Stack.Item>
               <Stack.Item>
                 <Button
+                  className="Panel__toolbarButton"
                   icon={settingsVisible ? 'times' : 'cog'}
                   selected={settingsVisible}
                   tooltip={settingsVisible ? 'Close settings' : 'Open settings'}
@@ -76,9 +82,12 @@ export function Panel(props) {
           </Stack.Item>
         )}
         <Stack.Item grow>
-          <Section fill fitted position="relative">
+          <Section className="Panel__chatSection" fill fitted position="relative">
             <Pane.Content scrollable id="chat-pane">
-              <ChatPanel lineHeight={settings.lineHeight} />
+              <ChatPanel
+                fontSize={`${settings.chatFontSize}px`}
+                lineHeight={settings.lineHeight}
+              />
             </Pane.Content>
             <Notifications>
               {game.connectionLostAt && (

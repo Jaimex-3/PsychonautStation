@@ -9,15 +9,23 @@ export function ToolContent(props: Props) {
   const { tool } = props;
 
   return (
-    <Box my={1}>
+    <Box className="PersonalCrafting__atom" my={1}>
       <Box
         verticalAlign="middle"
         inline
         my={-1}
         mr={0.5}
-        className={classes(['crafting32x32', tool.replace(/ /g, '')])}
+        className={classes([
+          'PersonalCrafting__atomIcon',
+          'crafting32x32',
+          tool.replace(/ /g, ''),
+        ])}
       />
-      <Box inline verticalAlign="middle">
+      <Box
+        className="PersonalCrafting__atomLabel"
+        inline
+        verticalAlign="middle"
+      >
         {tool}
       </Box>
     </Box>

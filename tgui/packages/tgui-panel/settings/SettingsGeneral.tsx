@@ -151,6 +151,25 @@ export function SettingsGeneral(props) {
             </Stack.Item>
           </Stack>
         </LabeledList.Item>
+        <LabeledList.Item label="Chat font size" verticalAlign="middle">
+          <Stack textAlign="center">
+            <Stack.Item grow>
+              <Slider
+                width="100%"
+                step={1}
+                stepPixelSize={20}
+                minValue={8}
+                maxValue={32}
+                value={settings.chatFontSize}
+                unit="px"
+                format={(value) => toFixed(value)}
+                onChange={(e, value) =>
+                  updateSettings({ chatFontSize: value })
+                }
+              />
+            </Stack.Item>
+          </Stack>
+        </LabeledList.Item>
         <LabeledList.Item label="Line height">
           <Slider
             width="100%"

@@ -34,6 +34,7 @@ var turfname = "";
 var imageRetryDelay = 500;
 var imageRetryLimit = 50;
 var menu = document.getElementById("menu");
+var statcontainer = document.getElementById("stat-container");
 var statcontentdiv = document.getElementById("statcontent");
 var storedimages = [];
 var split_admin_tabs = false;
@@ -321,43 +322,64 @@ function draw_debug() {
   }
   document.getElementById("statcontent").appendChild(table3);
 }
+
+function appendStatusRow(container, text, linkText, linkHref) {
+  var row = document.createElement("div");
+  row.className = "status-row";
+  var separator = text.indexOf(":");
+
+  if (separator > 0) {
+    var label = document.createElement("span");
+    label.className = "status-row-label";
+    label.textContent = text.slice(0, separator);
+    row.appendChild(label);
+
+    var value = document.createElement("span");
+    value.className = "status-row-value";
+    value.textContent = text.slice(separator + 1).trim();
+    row.appendChild(value);
+  } else {
+    row.className += " status-row-plain";
+    if (!linkHref) {
+      row.textContent = text;
+    }
+  }
+
+  if (linkHref) {
+    var a = document.createElement("a");
+    a.href = "byond://?" + linkHref;
+    a.textContent = linkText;
+    var linkTarget = separator > 0 ? row.lastChild : row;
+    linkTarget.appendChild(a);
+  }
+
+  container.appendChild(row);
+}
+
 function draw_status() {
   if (!document.getElementById("Status")) {
     createStatusTab("Status");
     current_tab = "Status";
   }
   statcontentdiv.textContent = "";
-  var table = document.createElement("table");
+  var table = document.createElement("div");
+  table.className = "status-list";
   for (var i = 0; i < status_tab_parts.length; i++) {
     var part = status_tab_parts[i];
     if (!Array.isArray(part)) {
-      var div = document.createElement("div");
       if (part.trim() == "") {
         table.appendChild(document.createElement("br"));
       } else {
-        div.textContent = part;
-        table.appendChild(div);
+        appendStatusRow(table, part);
       }
     } else {
-      var div;
       if (part[0].trim() == "same_line") {
-        var a = document.createElement("a");
-        a.href = "byond://?" + part[2];
-        a.textContent = part[1];
-        div.appendChild(a);
+        appendStatusRow(table, part[1], part[1], part[2]);
       } else {
-        div = document.createElement("div");
         if (part[0].trim() == "") {
           table.appendChild(document.createElement("br"));
         } else {
-          div.textContent = part[0];
-          if (part[2]) {
-            var a = document.createElement("a");
-            a.href = "byond://?" + part[2];
-            a.textContent = part[1];
-            div.appendChild(a);
-          }
-          table.appendChild(div);
+          appendStatusRow(table, part[0], part[1], part[2]);
         }
       }
     }
@@ -372,6 +394,7 @@ function draw_mc() {
   statcontentdiv.textContent = "";
   statcontentdiv.className = "mcstatcontent";
   var table = document.createElement("table");
+  table.className = "mc-table";
   for (var i = 0; i < mc_tab_parts.length; i++) {
     var part = mc_tab_parts[i];
     var tr = document.createElement("tr");
@@ -444,6 +467,7 @@ function iconError(e) {
 function draw_listedturf() {
   statcontentdiv.textContent = "";
   var table = document.createElement("table");
+  table.className = "listed-turf";
   for (var i = 0; i < turfcontents.length; i++) {
     var part = turfcontents[i];
     var clickfunc = (function (part) {
@@ -519,6 +543,7 @@ function remove_mc() {
 function draw_sdql2() {
   statcontentdiv.textContent = "";
   var table = document.createElement("table");
+  table.className = "stat-data-table";
   for (var i = 0; i < sdql2.length; i++) {
     var part = sdql2[i];
     var tr = document.createElement("tr");
@@ -543,6 +568,7 @@ function draw_sdql2() {
 function draw_tickets() {
   statcontentdiv.textContent = "";
   var table = document.createElement("table");
+  table.className = "stat-data-table";
   if (!tickets) {
     return;
   }
@@ -727,6 +753,28 @@ function set_tabs_style(style) {
   } else if (style == "scrollable") {
     menu.classList.remove("menu-wrap");
     menu.classList.remove("tabs-classic");
+  }
+}
+
+function set_panel_layout_style(style) {
+  statcontainer.classList.remove("panel-layout-modern");
+  statcontainer.classList.remove("panel-layout-classic");
+
+  if (style == "classic") {
+    statcontainer.classList.add("panel-layout-classic");
+  } else {
+    statcontainer.classList.add("panel-layout-modern");
+  }
+}
+
+function set_panel_color_theme(theme) {
+  statcontainer.classList.remove("panel-theme-blue");
+  statcontainer.classList.remove("panel-theme-midnight");
+
+  if (theme == "midnight") {
+    statcontainer.classList.add("panel-theme-midnight");
+  } else {
+    statcontainer.classList.add("panel-theme-blue");
   }
 }
 

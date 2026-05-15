@@ -26,7 +26,7 @@ export function ChatTabs(props) {
   const [, setSettingsVisible] = useAtom(settingsVisibleAtom);
 
   return (
-    <Stack align="center">
+    <Stack className="ChatTabs" align="center">
       <Stack.Item>
         <Tabs scrollable textAlign="center">
           {pages.map((page) => {
@@ -48,6 +48,7 @@ export function ChatTabs(props) {
       </Stack.Item>
       <Stack.Item>
         <Button
+          className="ChatTabs__add"
           color="transparent"
           icon="plus"
           onClick={() => {

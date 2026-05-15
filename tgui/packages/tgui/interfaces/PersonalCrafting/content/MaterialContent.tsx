@@ -1,5 +1,6 @@
 import { useBackend } from 'tgui/backend';
 import { Box, Stack } from 'tgui-core/components';
+import { classes } from 'tgui-core/react';
 
 import { findIcon } from '../helpers';
 import type { CraftingData } from '../types';
@@ -18,17 +19,18 @@ export function MaterialContent(props: Props) {
   const icon = findIcon(atom_id, data);
 
   return (
-    <Stack>
+    <Stack className="PersonalCrafting__materialTab">
       <Stack.Item>
         <Box
+          className={classes(['PersonalCrafting__materialIcon', icon])}
           verticalAlign="middle"
           inline
           ml={-1.5}
           mr={-0.5}
-          className={icon}
         />
       </Stack.Item>
       <Stack.Item
+        className="PersonalCrafting__materialName"
         height="32px"
         lineHeight="32px"
         grow
@@ -41,7 +43,11 @@ export function MaterialContent(props: Props) {
       >
         {name}
       </Stack.Item>
-      <Stack.Item height="32px" lineHeight="32px">
+      <Stack.Item
+        className="PersonalCrafting__materialCount"
+        height="32px"
+        lineHeight="32px"
+      >
         {occurences}
       </Stack.Item>
     </Stack>

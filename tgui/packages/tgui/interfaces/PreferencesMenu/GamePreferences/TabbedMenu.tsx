@@ -13,12 +13,18 @@ export function TabbedMenu(props: TabbedMenuProps) {
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   return (
-    <Stack vertical fill>
-      <Stack.Item>
-        <Stack fill px={5}>
+    <Stack vertical fill className="PreferencesMenu__TabbedMenu">
+      <Stack.Item className="PreferencesMenu__TabbedMenuNav">
+        <Stack fill px={5} className="PreferencesMenu__TabbedMenuButtons">
           {props.categoryEntries.map(([category, children]) => (
-            <Stack.Item key={category} grow basis="content">
+            <Stack.Item
+              key={category}
+              grow
+              basis={0}
+              className="PreferencesMenu__TabbedMenuButtonSlot"
+            >
               <Button
+                className="PreferencesMenu__TabbedMenuButton"
                 align="center"
                 fontSize="1.2em"
                 fluid
@@ -44,8 +50,14 @@ export function TabbedMenu(props: TabbedMenuProps) {
         </Stack>
       </Stack.Item>
       {!!props.setSearchText && (
-        <Stack.Item px={2} pl={5} pr={5}>
+        <Stack.Item
+          px={2}
+          pl={5}
+          pr={5}
+          className="PreferencesMenu__TabbedMenuSearch"
+        >
           <Input
+            className="PreferencesMenu__TabbedMenuSearchInput"
             fluid
             height="2em"
             fontSize="1.2em"
@@ -61,19 +73,30 @@ export function TabbedMenu(props: TabbedMenuProps) {
         ref={sectionRef}
         position="relative"
         overflowY="scroll"
+        className="PreferencesMenu__TabbedMenuContent"
         {...props.contentProps}
       >
-        <Stack vertical fill px={2}>
+        <Stack
+          vertical
+          fill
+          px={2}
+          className="PreferencesMenu__TabbedMenuSections"
+        >
           {props.categoryEntries.map(([category, children]) => {
             if (children.length === 0) return null;
             return (
               <div
                 key={category}
+                className="PreferencesMenu__TabbedMenuSection"
                 ref={(ref) => {
                   categoryRefs.current[category] = ref;
                 }}
               >
-                <Section fill title={category}>
+                <Section
+                  fill
+                  title={category}
+                  className="PreferencesMenu__TabbedMenuSectionPanel"
+                >
                   {children}
                 </Section>
               </div>

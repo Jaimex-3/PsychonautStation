@@ -30,9 +30,9 @@ export function GamePreferenceWindow(props: Props) {
   }
 
   return (
-    <Stack vertical fill>
-      <Stack.Item>
-        <Stack fill>
+    <Stack vertical fill className="PreferencesMenu__Window PreferencesMenu__Window--game">
+      <Stack.Item className="PreferencesMenu__NavRow">
+        <Stack fill className="PreferencesMenu__NavButtons">
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -57,7 +57,12 @@ export function GamePreferenceWindow(props: Props) {
 
       <Stack.Divider />
 
-      <Stack.Item grow shrink basis="1px">
+      <Stack.Item
+        grow
+        shrink
+        basis="1px"
+        className="PreferencesMenu__Content PreferencesMenu__ScrollableContent"
+      >
         {pageContents}
       </Stack.Item>
     </Stack>

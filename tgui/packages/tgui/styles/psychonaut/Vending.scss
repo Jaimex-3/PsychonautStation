@@ -1,0 +1,279 @@
+.PsychonautWindow--modern {
+  &.Vending,
+  &.SmartVend {
+    background-color: var(--psychonaut-base);
+    background-image: url('tgui-core/assets/bg-nanotrasen.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70% 70%;
+    color: var(--psychonaut-text);
+  }
+
+  .Vending__layout {
+    gap: 6px;
+  }
+
+  .Vending__status,
+  .Vending__ad {
+    flex-shrink: 0;
+  }
+
+  .Vending__notice {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 6px;
+    background: hsl(from var(--psychonaut-panel) h s l / 0.88);
+    color: var(--psychonaut-text);
+  }
+
+  .Vending__notice--user {
+    border-color: var(--psychonaut-selected-border);
+  }
+
+  .Vending__notice--ad {
+    border-color: rgba(255, 209, 102, 0.55);
+    color: var(--psychonaut-warning);
+  }
+
+  .Vending__body {
+    min-height: 0;
+  }
+
+  .Vending__products,
+  .SmartVend__storage {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 6px;
+    background: transparent;
+  }
+
+  .Vending__products .Section__title,
+  .SmartVend__storage .Section__title {
+    align-items: center;
+    min-height: 34px;
+    border-bottom: 1px solid hsl(from var(--psychonaut-border) h s l / 0.8);
+    background: hsl(from var(--psychonaut-panel) h s l / 0.86);
+  }
+
+  .Vending__products .Section__titleText,
+  .SmartVend__storage .Section__titleText,
+  .Vending__products .Section__buttons,
+  .SmartVend__storage .Section__buttons {
+    display: flex;
+    align-items: center;
+  }
+
+  .Vending__products .Section__buttons,
+  .SmartVend__storage .Section__buttons {
+    gap: 6px;
+  }
+
+  .Vending__products .Section__content,
+  .SmartVend__storage .Section__content {
+    background: transparent;
+  }
+
+  .Vending__products .Section__title,
+  .SmartVend__storage .Section__title,
+  .Vending__products .Section__content,
+  .SmartVend__storage .Section__content {
+    color: var(--psychonaut-text);
+  }
+
+  .Vending__toolbar,
+  .SmartVend__toolbar {
+    min-height: 30px;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .Vending__productsToolbar {
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .Vending__toolbar > .Stack__item,
+  .SmartVend__toolbar > .Stack__item,
+  .Vending__productsToolbar > .Stack__item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .Vending__balance {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 76px;
+    height: 26px;
+    padding: 0 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: 1px solid rgba(143, 211, 108, 0.45);
+    border-radius: 999px;
+    background: rgba(143, 211, 108, 0.12);
+    color: var(--psychonaut-success);
+    font-size: 16px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .Vending__search,
+  .SmartVend__search {
+    min-width: 112px;
+  }
+
+  .Vending__productsToolbar .Vending__search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .Vending__search .Input,
+  .SmartVend__search .Input,
+  .Vending__colorButton,
+  .SmartVend__helpButton,
+  .SmartVend__dryButton {
+    height: 26px;
+  }
+
+  .Vending__search .Input,
+  .SmartVend__search .Input {
+    margin: 0;
+  }
+
+  .Vending__productsToolbar .LayoutToggle {
+    flex-shrink: 0;
+  }
+
+  .Vending__product,
+  .SmartVend__item {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 6px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.9);
+    color: var(--psychonaut-text);
+    box-shadow: inset 0 1px 0 rgba(216, 228, 240, 0.04);
+  }
+
+  .Vending__product:hover,
+  .SmartVend__item:hover {
+    border-color: var(--psychonaut-border-strong);
+    background: hsl(from var(--psychonaut-raised) h s l / 0.94);
+  }
+
+  .Vending__product--premium {
+    border-color: rgba(255, 209, 102, 0.5);
+    background: linear-gradient(
+      180deg,
+      rgba(60, 48, 20, 0.92),
+      rgba(39, 31, 15, 0.9)
+    );
+  }
+
+  .Vending__product--premium:hover {
+    border-color: rgba(255, 209, 102, 0.72);
+    background: linear-gradient(
+      180deg,
+      rgba(78, 63, 26, 0.94),
+      rgba(52, 42, 19, 0.92)
+    );
+  }
+
+  .Vending__product--premium .Vending__productMeta,
+  .Vending__product--premium .Vending__stock,
+  .Vending__product--premium .Vending__productName {
+    color: #f1dfb0;
+  }
+
+  .Vending__product--list,
+  .SmartVend__item--list {
+    min-height: 42px;
+  }
+
+  .Vending__productRow,
+  .SmartVend__itemRow {
+    align-items: center;
+    min-width: 0;
+  }
+
+  .Vending__productName,
+  .SmartVend__itemName {
+    overflow: hidden;
+    color: var(--psychonaut-text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .Vending__productMeta,
+  .SmartVend__itemMeta {
+    color: var(--psychonaut-muted);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  }
+
+  .Vending__stock,
+  .SmartVend__amount {
+    color: var(--psychonaut-muted);
+  }
+
+  .Vending__price,
+  .Vending__priceCell {
+    color: var(--psychonaut-warning);
+  }
+
+  .Vending__colorButton,
+  .SmartVend__helpButton,
+  .SmartVend__dryButton {
+    background: hsl(from var(--psychonaut-raised) h s l / 0.9);
+    color: var(--psychonaut-text);
+  }
+
+  .Vending__categoryDock {
+    flex-shrink: 0;
+  }
+
+  .Vending__categories {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 6px;
+    background: hsl(from var(--psychonaut-panel) h s l / 0.88);
+  }
+
+  .Vending__categoryButton {
+    margin: 2px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.9);
+    color: var(--psychonaut-muted);
+  }
+
+  .Vending__categoryButton--premium {
+    border-color: rgba(255, 209, 102, 0.45);
+    background: rgba(255, 209, 102, 0.12);
+    color: #f1dfb0;
+  }
+
+  .Vending__categoryButton--contraband {
+    border-color: rgba(255, 107, 107, 0.45);
+    background: rgba(255, 107, 107, 0.1);
+    color: #ffb2b2;
+  }
+
+  .Vending__categoryButton.Button--selected {
+    background: hsl(from var(--psychonaut-selected) h s l / 0.94);
+    border-color: var(--psychonaut-selected-border);
+    color: var(--psychonaut-text);
+  }
+
+  .SmartVend__empty {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 6px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.9);
+    color: var(--psychonaut-muted);
+  }
+
+  .SmartVend__quantity {
+    border-left: 1px solid var(--psychonaut-border);
+    background: rgba(23, 34, 51, 0.72);
+  }
+
+  &.PsychonautWindow--light .SmartVend__quantity {
+    background: rgba(255, 255, 255, 0.72);
+  }
+}

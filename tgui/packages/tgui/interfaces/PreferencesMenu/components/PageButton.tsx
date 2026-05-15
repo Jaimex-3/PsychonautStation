@@ -18,6 +18,7 @@ export function PageButton<TPage extends number>(props: Props<TPage>) {
 
   return (
     <Button
+      className="PreferencesMenu__PageButton"
       align="center"
       fontSize="1.2em"
       fluid

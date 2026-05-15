@@ -52,6 +52,12 @@
 @include meta.load-css('./interfaces/AnomalyTower.scss');
 @include meta.load-css('./interfaces/CivCargoHoldTerminal.scss');
 
+// Psychonaut Station interface customizations
+@include meta.load-css('./psychonaut/Foundation.scss');
+@include meta.load-css('./psychonaut/PersonalCrafting.scss');
+@include meta.load-css('./psychonaut/PreferencesMenu.scss');
+@include meta.load-css('./psychonaut/Vending.scss');
+
 // Layouts
 @include meta.load-css('./layouts/Layout.scss');
 @include meta.load-css('./layouts/NtosHeader.scss');

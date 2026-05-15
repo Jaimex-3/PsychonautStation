@@ -1,0 +1,75 @@
+.PsychonautWindow--modern {
+  --psychonaut-base: #080d13;
+  --psychonaut-surface: #0d141d;
+  --psychonaut-panel: #101722;
+  --psychonaut-raised: #172233;
+  --psychonaut-border: #223044;
+  --psychonaut-border-strong: #2c3b50;
+  --psychonaut-selected: #19304a;
+  --psychonaut-selected-border: #37628f;
+  --psychonaut-accent: #5da7ff;
+  --psychonaut-text: #d8e4f0;
+  --psychonaut-muted: #8ea4bd;
+  --psychonaut-faint: #5f7185;
+  --psychonaut-success: #8fd36c;
+  --psychonaut-warning: #ffd166;
+  --psychonaut-danger: #ff6b6b;
+
+  background-color: var(--psychonaut-base);
+  background-image: url('tgui-core/assets/bg-nanotrasen.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 70% 70%;
+  color: var(--psychonaut-text);
+
+  &.PsychonautWindow--theme-midnight:not(.PsychonautWindow--light) {
+    --psychonaut-base: #16161a;
+    --psychonaut-surface: #27272d;
+    --psychonaut-panel: #202027;
+    --psychonaut-raised: #2b2b33;
+    --psychonaut-border: #3c3c42;
+    --psychonaut-border-strong: #4a4a52;
+    --psychonaut-selected: #304252;
+    --psychonaut-selected-border: #5a7a8f;
+    --psychonaut-accent: #80a8c2;
+    --psychonaut-text: #d4dfec;
+    --psychonaut-muted: #859db5;
+    --psychonaut-faint: #6f879f;
+  }
+
+  &.PsychonautWindow--light {
+    --psychonaut-base: #f4f6f8;
+    --psychonaut-surface: #ffffff;
+    --psychonaut-panel: #e8edf3;
+    --psychonaut-raised: #dbe6f2;
+    --psychonaut-border: #c8d2de;
+    --psychonaut-border-strong: #aebdca;
+    --psychonaut-selected: #d7e9fb;
+    --psychonaut-selected-border: #2f7dc1;
+    --psychonaut-accent: #2f7dc1;
+    --psychonaut-text: #142333;
+    --psychonaut-muted: #52677d;
+    --psychonaut-faint: #6c8094;
+  }
+
+  .Input,
+  .SearchBar {
+    background: var(--psychonaut-surface);
+    border: 1px solid var(--psychonaut-border);
+    color: var(--psychonaut-text);
+  }
+
+  .Input:focus,
+  .SearchBar:focus-within {
+    border-color: var(--psychonaut-selected-border);
+    box-shadow: 0 0 0 1px rgba(93, 167, 255, 0.18);
+  }
+
+  .Section {
+    border-color: var(--psychonaut-border);
+  }
+
+  .Button {
+    border-color: var(--psychonaut-border);
+  }
+}

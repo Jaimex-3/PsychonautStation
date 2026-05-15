@@ -8,11 +8,15 @@ import {
   Section,
   Stack,
 } from 'tgui-core/components';
-import type { BooleanLike } from 'tgui-core/react';
+import { type BooleanLike, classes } from 'tgui-core/react';
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
+import {
+  getPsychonautWindowClasses,
+  usePsychonautPanelSettings,
+} from '../psychonaut/usePanelSettings';
 import { getLayoutState, LAYOUT, LayoutToggle } from './common/LayoutToggle';
 
 type Item = {
@@ -32,6 +36,7 @@ type Data = {
 
 export const SmartVend = (props) => {
   const { act, data } = useBackend<Data>();
+  const panelSettings = usePsychonautPanelSettings();
   const [searchText, setSearchText] = useState('');
   const [displayMode, setDisplayMode] = useState(getLayoutState());
   const search = createSearch(searchText, (item: Item) => item.name);
@@ -39,18 +44,24 @@ export const SmartVend = (props) => {
     searchText.length > 0
       ? Object.values(data.contents).filter(search)
       : Object.values(data.contents);
+  const smartVendClassName = classes(
+    getPsychonautWindowClasses('SmartVend', panelSettings),
+  );
+
   return (
     <Window width={431} height={575}>
-      <Window.Content>
+      <Window.Content className={smartVendClassName}>
         <Section
+          className="SmartVend__storage"
           fill
           scrollable
           title="Storage"
           buttons={
-            <Stack>
+            <Stack className="SmartVend__toolbar">
               {data.isdryer ? (
                 <Stack.Item>
                   <Button
+                    className="SmartVend__dryButton"
                     icon={data.drying ? 'stop' : 'tint'}
                     onClick={() => act('Dry')}
                   >
@@ -61,6 +72,7 @@ export const SmartVend = (props) => {
                 <>
                   <Stack.Item>
                     <Input
+                      className="SmartVend__search"
                       autoFocus
                       placeholder="Search..."
                       value={searchText}
@@ -73,6 +85,7 @@ export const SmartVend = (props) => {
               )}
               <Stack.Item>
                 <Button
+                  className="SmartVend__helpButton"
                   icon="question"
                   tooltip={
                     <>
@@ -88,7 +101,7 @@ export const SmartVend = (props) => {
           }
         >
           {!contents.length ? (
-            <NoticeBox>Nothing found.</NoticeBox>
+            <NoticeBox className="SmartVend__empty">Nothing found.</NoticeBox>
           ) : (
             contents.map((item) =>
               displayMode === LAYOUT.Grid ? (
@@ -108,6 +121,7 @@ const ItemTile = ({ item }) => {
   const { act } = useBackend<Data>();
   return (
     <ImageButton
+      className="SmartVend__item SmartVend__item--grid"
       key={item.path}
       dmIcon={item.icon}
       dmIconState={item.icon_state}
@@ -131,9 +145,17 @@ const ItemTile = ({ item }) => {
         )
       }
       buttonsAlt={
-        <Stack bold color="rgb(185, 185, 185)" fontSize={0.8}>
+        <Stack
+          className="SmartVend__itemMeta"
+          bold
+          color="rgb(185, 185, 185)"
+          fontSize={0.8}
+        >
           <Stack.Item grow />
-          <Stack.Item style={{ textShadow: '0 1px 1px black' }}>
+          <Stack.Item
+            className="SmartVend__amount"
+            style={{ textShadow: '0 1px 1px black' }}
+          >
             x{item.amount}
           </Stack.Item>
         </Stack>
@@ -161,6 +183,7 @@ const ItemList = ({ item }) => {
   const disabled = item.amount <= 1;
   return (
     <ImageButton
+      className="SmartVend__item SmartVend__item--list"
       key={item.path}
       fluid
       imageSize={32}
@@ -169,6 +192,7 @@ const ItemList = ({ item }) => {
       disabled={item.amount < 1}
       buttons={
         <Stack
+          className="SmartVend__quantity"
           opacity={disabled && 0.5}
           backgroundColor={'rgba(175, 175, 175, 0.1)'}
           style={{ pointerEvents: disabled ? 'none' : 'auto' }}
@@ -201,9 +225,11 @@ const ItemList = ({ item }) => {
         })
       }
     >
-      <Stack textAlign="left">
-        <Stack.Item grow>{item.name}</Stack.Item>
-        <Stack.Item opacity={0.5} fontSize={0.8}>
+      <Stack className="SmartVend__itemRow" textAlign="left">
+        <Stack.Item className="SmartVend__itemName" grow>
+          {item.name}
+        </Stack.Item>
+        <Stack.Item className="SmartVend__amount" opacity={0.5} fontSize={0.8}>
           x{item.amount}
         </Stack.Item>
       </Stack>

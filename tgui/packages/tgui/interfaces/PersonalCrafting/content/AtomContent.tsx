@@ -1,5 +1,6 @@
 import { useBackend } from 'tgui/backend';
 import { Box } from 'tgui-core/components';
+import { classes } from 'tgui-core/react';
 
 import { findIcon } from '../helpers';
 import type { CraftingData } from '../types';
@@ -17,15 +18,22 @@ export function AtomContent(props: Props) {
   const atom = data.atom_data[atom_id - 1];
 
   return (
-    <Box my={1}>
+    <Box className="PersonalCrafting__atom" my={1}>
       <Box
         verticalAlign="middle"
         inline
         my={-1}
         mr={0.5}
-        className={findIcon(atom_id, data)}
+        className={classes([
+          'PersonalCrafting__atomIcon',
+          findIcon(atom_id, data),
+        ])}
       />
-      <Box inline verticalAlign="middle">
+      <Box
+        className="PersonalCrafting__atomLabel"
+        inline
+        verticalAlign="middle"
+      >
         {atom.name}
         {atom.is_reagent ? `\xa0${amount}u` : amount > 1 && `\xa0${amount}x`}
       </Box>

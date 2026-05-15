@@ -8,7 +8,7 @@ import {
   Stack,
   Tooltip,
 } from 'tgui-core/components';
-import type { BooleanLike } from 'tgui-core/react';
+import { type BooleanLike, classes } from 'tgui-core/react';
 
 import { GroupTitle } from '../GroupTitle';
 import { findIcon } from '../helpers';
@@ -29,18 +29,29 @@ export function RecipeContentCompact(props: Props) {
   const { act, data } = useBackend<CraftingData>();
 
   return (
-    <Section>
-      <Stack my={-0.75}>
+    <Section
+      className={classes([
+        'PersonalCrafting__recipeCard',
+        'PersonalCrafting__recipeCard--compact',
+        (!craftable || busy) && 'PersonalCrafting__recipeCard--muted',
+      ])}
+    >
+      <Stack className="PersonalCrafting__compactRow">
         <Stack.Item>
-          <Box className={findIcon(item.id, data)} />
+          <Box
+            className={classes([
+              'PersonalCrafting__recipeIcon',
+              findIcon(item.id, data),
+            ])}
+          />
         </Stack.Item>
         <Stack.Item grow>
           <Stack>
             <Stack.Item grow>
-              <Box mb={0.5} bold style={{ textTransform: 'capitalize' }}>
+              <Box className="PersonalCrafting__recipeTitle" bold>
                 {item.name}
               </Box>
-              <Box style={{ textTransform: 'capitalize' }} color="gray">
+              <Box className="PersonalCrafting__compactReqs" color="gray">
                 {Array.from(
                   Object.keys(item.reqs).map((id) => {
                     const atom_id = Number(id);
@@ -93,7 +104,7 @@ export function RecipeContentCompact(props: Props) {
             </Stack.Item>
             <Stack.Item>
               {!item.non_craftable ? (
-                <Box>
+                <Box className="PersonalCrafting__compactActions">
                   {!!item.tool_behaviors && (
                     <Tooltip
                       content={`Tools: ${item.tool_behaviors.join(', ')}`}
@@ -102,6 +113,7 @@ export function RecipeContentCompact(props: Props) {
                     </Tooltip>
                   )}
                   <Button
+                    className="PersonalCrafting__makeButton"
                     my={0.3}
                     lineHeight={2.5}
                     align="center"
@@ -124,6 +136,7 @@ export function RecipeContentCompact(props: Props) {
                   </Button>
                   {!!item.mass_craftable && (
                     <Button
+                      className="PersonalCrafting__massButton"
                       my={0.3}
                       lineHeight={2.5}
                       width="32px"
@@ -171,35 +184,43 @@ export function RecipeContent(props: FullProps) {
   const { act, data } = useBackend<CraftingData>();
 
   return (
-    <Section>
-      <Stack>
+    <Section
+      className={classes([
+        'PersonalCrafting__recipeCard',
+        (!craftable || busy) && 'PersonalCrafting__recipeCard--muted',
+      ])}
+    >
+      <Stack className="PersonalCrafting__recipeBody">
         <Stack.Item>
-          <Box textAlign="center" minWidth="64px" minHeight="64px" mr={1}>
+          <Box className="PersonalCrafting__recipeIconFrame">
             <Box
-              style={{
-                transform: 'scale(1.5)',
-              }}
-              m="16px"
-              className={findIcon(item.id, data)}
+              className={classes([
+                'PersonalCrafting__recipeIcon',
+                findIcon(item.id, data),
+              ])}
             />
           </Box>
         </Stack.Item>
         <Stack.Item grow>
           <Stack>
             <Stack.Item grow={5}>
-              <Box mb={1} bold style={{ textTransform: 'capitalize' }}>
+              <Box className="PersonalCrafting__recipeTitle" bold>
                 {item.name}
               </Box>
-              {item.desc && <Box color="gray">{item.desc}</Box>}
+              {item.desc && (
+                <Box className="PersonalCrafting__recipeDesc" color="gray">
+                  {item.desc}
+                </Box>
+              )}
               {!!item.has_food_effect && (
-                <Box my={2} color="pink">
+                <Box className="PersonalCrafting__specialEffect" color="pink">
                   <Icon name="wand-magic-sparkles" mr={1} />
                   Special effect on consumption.
                 </Box>
               )}
-              <Box style={{ textTransform: 'capitalize' }}>
+              <Box className="PersonalCrafting__recipeGroups">
                 {item.reqs && (
-                  <Box>
+                  <Box className="PersonalCrafting__group">
                     <GroupTitle
                       title={
                         mode === MODE.cooking ? 'Ingredients' : 'Materials'
@@ -215,7 +236,7 @@ export function RecipeContent(props: FullProps) {
                   </Box>
                 )}
                 {item.chem_catalysts && (
-                  <Box>
+                  <Box className="PersonalCrafting__group">
                     <GroupTitle title="Catalysts" />
                     {Object.keys(item.chem_catalysts).map((atom_id) => (
                       <AtomContent
@@ -227,7 +248,7 @@ export function RecipeContent(props: FullProps) {
                   </Box>
                 )}
                 {(item.tool_paths || item.tool_behaviors) && (
-                  <Box>
+                  <Box className="PersonalCrafting__group">
                     <GroupTitle title="Tools" />
                     {item.tool_paths?.map((tool) => (
                       <AtomContent key={tool} atom_id={tool} amount={1} />
@@ -238,7 +259,7 @@ export function RecipeContent(props: FullProps) {
                   </Box>
                 )}
                 {item.machinery && (
-                  <Box>
+                  <Box className="PersonalCrafting__group">
                     <GroupTitle title="Machinery" />
                     {item.machinery.map((atom_id) => (
                       <AtomContent key={atom_id} atom_id={atom_id} amount={1} />
@@ -246,7 +267,7 @@ export function RecipeContent(props: FullProps) {
                   </Box>
                 )}
                 {item.structures && (
-                  <Box>
+                  <Box className="PersonalCrafting__group">
                     <GroupTitle title="Structures" />
                     {item.structures.map((atom_id) => (
                       <AtomContent key={atom_id} atom_id={atom_id} amount={1} />
@@ -255,9 +276,9 @@ export function RecipeContent(props: FullProps) {
                 )}
               </Box>
               {!!item.steps?.length && (
-                <Box>
+                <Box className="PersonalCrafting__group">
                   <GroupTitle title="Steps" />
-                  <ul style={{ paddingLeft: '20px' }}>
+                  <ul className="PersonalCrafting__steps">
                     {item.steps.map((step) => (
                       <li key={step}>{step}</li>
                     ))}
@@ -265,13 +286,14 @@ export function RecipeContent(props: FullProps) {
                 </Box>
               )}
             </Stack.Item>
-            <Stack.Item pl={1} grow={2}>
+            <Stack.Item className="PersonalCrafting__actionRail" grow={2}>
               <Stack vertical>
                 <Stack.Item>
                   {!item.non_craftable && (
                     <Stack>
                       <Stack.Item grow>
                         <Button
+                          className="PersonalCrafting__makeButton"
                           lineHeight={2.5}
                           align="center"
                           fluid
@@ -296,6 +318,7 @@ export function RecipeContent(props: FullProps) {
                       <Stack.Item>
                         {!!item.mass_craftable && (
                           <Button
+                            className="PersonalCrafting__massButton"
                             minWidth="30px"
                             lineHeight={2.5}
                             align="center"
@@ -317,12 +340,24 @@ export function RecipeContent(props: FullProps) {
                 </Stack.Item>
                 <Stack.Item>
                   {!!item.complexity && (
-                    <Box color="gray" width="104px" lineHeight={1.5} mt={1}>
+                    <Box
+                      className="PersonalCrafting__meta"
+                      color="gray"
+                      width="104px"
+                      lineHeight={1.5}
+                      mt={1}
+                    >
                       Complexity: {item.complexity}
                     </Box>
                   )}
                   {!!item.foodtypes && item.foodtypes.length > 0 && (
-                    <Box color="gray" width="104px" lineHeight={1.5} mt={1}>
+                    <Box
+                      className="PersonalCrafting__meta"
+                      color="gray"
+                      width="104px"
+                      lineHeight={1.5}
+                      mt={1}
+                    >
                       <Divider />
                       {item.foodtypes.map((foodtype) => (
                         <FoodtypeContent

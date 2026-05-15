@@ -1,0 +1,309 @@
+.PreferencesMenu--modern {
+  color: var(--psychonaut-text);
+
+  &.PreferencesMenu {
+    background: var(--psychonaut-base);
+  }
+
+  .PreferencesMenu__Window {
+    gap: 10px;
+    padding: 10px;
+    background: linear-gradient(
+      180deg,
+      hsl(from var(--psychonaut-panel) h s l / 0.76),
+      hsl(from var(--psychonaut-base) h s l / 0.88)
+    );
+  }
+
+  .PreferencesMenu__Profiles {
+    padding: 2px 0 0;
+  }
+
+  .PreferencesMenu__Profiles .Button {
+    min-height: 32px;
+    padding: 0 12px;
+    border-color: var(--psychonaut-border);
+    border-radius: 999px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.94);
+    color: var(--psychonaut-muted);
+  }
+
+  .PreferencesMenu__Profiles .Button--selected {
+    border-color: var(--psychonaut-selected-border);
+    background: hsl(from var(--psychonaut-selected) h s l / 0.96);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__NavRow {
+    padding: 6px;
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.92);
+  }
+
+  .PreferencesMenu__NavButtons {
+    gap: 6px;
+  }
+
+  .PreferencesMenu__PageButton {
+    min-height: 34px;
+    padding: 0 12px;
+    border-color: transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--psychonaut-muted);
+    font-size: 14px !important;
+  }
+
+  .PreferencesMenu__PageButton:hover {
+    background: hsl(from var(--psychonaut-raised) h s l / 0.88);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__PageButton.Button--selected {
+    border-color: var(--psychonaut-selected-border);
+    background: hsl(from var(--psychonaut-selected) h s l / 0.95);
+    color: var(--psychonaut-text);
+    box-shadow: inset 0 1px 0 rgba(216, 228, 240, 0.05);
+  }
+
+  .PreferencesMenu__Content {
+    min-height: 0;
+    padding: 10px;
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-base) h s l / 0.78);
+  }
+
+  .PreferencesMenu__ScrollableContent {
+    scrollbar-color: var(--psychonaut-border-strong) transparent;
+  }
+
+  .PreferencesMenu__Content .Section,
+  .PreferencesMenu__TabbedMenuSectionPanel,
+  .ChoicedSelection {
+    border-color: var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-panel) h s l / 0.9);
+    color: var(--psychonaut-text);
+    box-shadow: inset 0 1px 0 rgba(216, 228, 240, 0.04);
+  }
+
+  .PreferencesMenu__Content .Section__title,
+  .PreferencesMenu__TabbedMenuSectionPanel .Section__title,
+  .ChoicedSelection .Section__title {
+    border-bottom: 1px solid hsl(from var(--psychonaut-border) h s l / 0.85);
+    background: hsl(from var(--psychonaut-surface) h s l / 0.92);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__Content .Section__content,
+  .PreferencesMenu__TabbedMenuSectionPanel .Section__content,
+  .ChoicedSelection .Section__content {
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__Content .Input,
+  .PreferencesMenu__Content .Button,
+  .PreferencesMenu__Content .Dropdown__control,
+  .PreferencesMenu__TabbedMenu .Input,
+  .PreferencesMenu__TabbedMenu .Button,
+  .PreferencesMenu__TabbedMenu .Dropdown__control,
+  .ChoicedSelection .Input,
+  .ChoicedSelection .Button {
+    border-color: var(--psychonaut-border);
+  }
+
+  .PreferencesMenu__Content .Input,
+  .PreferencesMenu__TabbedMenu .Input,
+  .ChoicedSelection .Input {
+    background: hsl(from var(--psychonaut-surface) h s l / 0.96);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__Content .Button:not(.PreferencesMenu__PageButton),
+  .PreferencesMenu__TabbedMenu .Button,
+  .ChoicedSelection .Button {
+    background: hsl(from var(--psychonaut-surface) h s l / 0.94);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__Content .Button:hover,
+  .PreferencesMenu__TabbedMenu .Button:hover,
+  .ChoicedSelection .Button:hover {
+    background: hsl(from var(--psychonaut-raised) h s l / 0.96);
+  }
+
+  .PreferencesMenu__Content .Button--selected:not(.PreferencesMenu__PageButton),
+  .PreferencesMenu__TabbedMenu .Button--selected,
+  .ChoicedSelection .Button--selected {
+    border-color: var(--psychonaut-selected-border);
+    background: hsl(from var(--psychonaut-selected) h s l / 0.95);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__TabbedMenu {
+    gap: 10px;
+  }
+
+  .PreferencesMenu__TabbedMenuNav {
+    padding: 6px;
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.9);
+  }
+
+  .PreferencesMenu__TabbedMenuButtons {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .PreferencesMenu__TabbedMenuButtonSlot {
+    min-width: 0;
+  }
+
+  .PreferencesMenu__TabbedMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    min-width: 0;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: hsl(from var(--psychonaut-base) h s l / 0.48);
+    color: var(--psychonaut-muted);
+    font-size: 12px !important;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .PreferencesMenu__TabbedMenuButton:disabled {
+    opacity: 0.45;
+  }
+
+  .PreferencesMenu__TabbedMenuSearch {
+    padding: 0 6px;
+  }
+
+  .PreferencesMenu__TabbedMenuSearchInput {
+    height: 32px !important;
+  }
+
+  .PreferencesMenu__TabbedMenuContent {
+    min-height: 0;
+    padding-right: 4px;
+  }
+
+  .PreferencesMenu__TabbedMenuSections {
+    gap: 10px;
+  }
+
+  .PreferencesMenu__TabbedMenuSectionPanel .Section__content {
+    padding: 10px;
+  }
+
+  .PreferencesMenu__Window--character .PreferencesMenu__Content {
+    background: linear-gradient(
+      180deg,
+      hsl(from var(--psychonaut-panel) h s l / 0.56),
+      hsl(from var(--psychonaut-base) h s l / 0.84)
+    );
+  }
+
+  .ChoicedSelection {
+    padding: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .PreferencesMenu__Jobs {
+    gap: 10px;
+  }
+
+  .PreferencesMenu__Jobs__departments--Captain,
+  .PreferencesMenu__Jobs__departments--Command,
+  .PreferencesMenu__Jobs__departments--Security,
+  .PreferencesMenu__Jobs__departments--Engineering,
+  .PreferencesMenu__Jobs__departments--Medical,
+  .PreferencesMenu__Jobs__departments--Science,
+  .PreferencesMenu__Jobs__departments--Cargo,
+  .PreferencesMenu__Jobs__departments--Service,
+  .PreferencesMenu__Jobs__departments--Silicon,
+  .PreferencesMenu__Jobs__departments--Assistant {
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .PreferencesMenu__Jobs__PriorityHeader {
+    color: var(--psychonaut-muted);
+  }
+
+  .PreferencesMenu__Quirks__QuirkList {
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.84);
+  }
+
+  .PreferencesMenu__Quirks__QuirkList__quirk {
+    border-bottom-color: hsl(from var(--psychonaut-border) h s l / 0.85);
+    color: var(--psychonaut-text);
+  }
+
+  .PreferencesMenu__Quirks__QuirkList__quirk:hover {
+    background-color: hsl(from var(--psychonaut-raised) h s l / 0.92);
+  }
+
+  .PreferencesMenu__Antags .Section {
+    margin-bottom: 10px;
+  }
+
+  .PreferencesMenu__Antags__antagSelection {
+    gap: 12px;
+  }
+
+  .PreferencesMenu__Antags__antagSelection__antagonist {
+    padding: 8px;
+    border: 1px solid var(--psychonaut-border);
+    border-radius: 8px;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.7);
+  }
+
+  .PreferencesMenu__Antags__antagSelection__antagonist--on {
+    border-color: rgba(143, 211, 108, 0.55);
+    background: rgba(143, 211, 108, 0.1);
+  }
+
+  .PreferencesMenu__Antags__antagSelection__antagonist--off {
+    border-color: rgba(255, 107, 107, 0.45);
+  }
+
+  .PreferencesMenu__Content blockquote,
+  .PreferencesMenu__Content .BlockQuote {
+    margin: 0;
+    padding: 10px 12px;
+    border-left: 3px solid var(--psychonaut-selected-border);
+    border-radius: 0 6px 6px 0;
+    background: hsl(from var(--psychonaut-surface) h s l / 0.6);
+    color: var(--psychonaut-text);
+  }
+
+  &.PreferencesMenu--light {
+    .PreferencesMenu__Window {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.76),
+        rgba(232, 237, 243, 0.92)
+      );
+    }
+
+    .PreferencesMenu__Content,
+    .ChoicedSelection,
+    .PreferencesMenu__TabbedMenuNav,
+    .PreferencesMenu__TabbedMenuSectionPanel,
+    .PreferencesMenu__Quirks__QuirkList {
+      box-shadow: inset 0 1px 0 rgba(20, 35, 51, 0.04);
+    }
+  }
+}

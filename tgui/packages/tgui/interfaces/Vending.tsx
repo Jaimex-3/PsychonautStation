@@ -8,10 +8,15 @@ import {
   Section,
   Stack,
 } from 'tgui-core/components';
+import { classes } from 'tgui-core/react';
 import { capitalizeAll, createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
+import {
+  getPsychonautWindowClasses,
+  usePsychonautPanelSettings,
+} from '../psychonaut/usePanelSettings';
 import { getLayoutState, LAYOUT, LayoutToggle } from './common/LayoutToggle';
 
 type StockItem = {
@@ -62,6 +67,7 @@ type VendingData = {
 
 export const Vending = () => {
   const { data } = useBackend<VendingData>();
+  const panelSettings = usePsychonautPanelSettings();
 
   const {
     all_products_free,
@@ -105,24 +111,28 @@ export const Vending = () => {
       });
     }),
   );
+  const vendingClassName = classes(
+    getPsychonautWindowClasses('Vending', panelSettings),
+  );
 
   return (
     <Window width={431} height={635}>
-      <Window.Content>
-        <Stack fill vertical>
+      <Window.Content className={vendingClassName}>
+        <Stack fill vertical className="Vending__layout">
           {!all_products_free && (
-            <Stack.Item>
+            <Stack.Item className="Vending__status">
               <UserDetails />
             </Stack.Item>
           )}
           {ad && (
-            <Stack.Item>
+            <Stack.Item className="Vending__ad">
               <AdSection AdDisplay={ad} />
             </Stack.Item>
           )}
-          <Stack.Item grow>
+          <Stack.Item grow className="Vending__body">
             <ProductDisplay
               inventory={inventory}
+              modernLayout={panelSettings.panelLayoutStyle === 'modern'}
               stockSearch={stockSearch}
               setStockSearch={setStockSearch}
               selectedCategory={selectedCategory}
@@ -131,7 +141,7 @@ export const Vending = () => {
 
           {stockSearch.length < 2 &&
             Object.keys(filteredCategories).length > 1 && (
-              <Stack.Item>
+              <Stack.Item className="Vending__categoryDock">
                 <CategorySelector
                   categories={filteredCategories}
                   selectedCategory={selectedCategory!}
@@ -151,7 +161,11 @@ export const UserDetails = () => {
   const { user } = data;
 
   return (
-    <NoticeBox m={0} color={user && 'blue'}>
+    <NoticeBox
+      className="Vending__notice Vending__notice--user"
+      m={0}
+      color={user && 'blue'}
+    >
       <Stack align="center">
         <Stack.Item>
           <Icon name="id-card" size={1.5} />
@@ -170,7 +184,11 @@ const AdSection = (props: { AdDisplay: string }) => {
   const { AdDisplay } = props;
 
   return (
-    <NoticeBox m={0} color={'yellow'}>
+    <NoticeBox
+      className="Vending__notice Vending__notice--ad"
+      m={0}
+      color={'yellow'}
+    >
       <Stack align="center">
         <Stack.Item>{AdDisplay}</Stack.Item>
       </Stack>
@@ -181,12 +199,19 @@ const AdSection = (props: { AdDisplay: string }) => {
 /** Displays  products in a section, with user balance at top */
 const ProductDisplay = (props: {
   inventory: ProductRecord[];
+  modernLayout: boolean;
   stockSearch: string;
   setStockSearch: (search: string) => void;
   selectedCategory: string | null;
 }) => {
   const { data } = useBackend<VendingData>();
-  const { inventory, stockSearch, setStockSearch, selectedCategory } = props;
+  const {
+    inventory,
+    modernLayout,
+    stockSearch,
+    setStockSearch,
+    selectedCategory,
+  } = props;
   const {
     stock,
     all_products_free,
@@ -198,20 +223,54 @@ const ProductDisplay = (props: {
 
   return (
     <Section
+      className="Vending__products"
       fill
       scrollable
       title="Products"
       buttons={
-        <Stack>
+        !modernLayout && (
+          <Stack className="Vending__toolbar">
+            {!all_products_free && user && (
+              <Stack.Item
+                className="Vending__balance"
+                fontSize="16px"
+                color="green"
+              >
+                {user?.cash || 0}
+                {displayed_currency_name}
+                <Icon name={displayed_currency_icon} color="gold" />
+              </Stack.Item>
+            )}
+            <Stack.Item>
+              <Input
+                className="Vending__search"
+                onChange={setStockSearch}
+                expensive
+                placeholder="Search..."
+                value={stockSearch}
+              />
+            </Stack.Item>
+            <LayoutToggle state={toggleLayout} setState={setToggleLayout} />
+          </Stack>
+        )
+      }
+    >
+      {modernLayout && (
+        <Stack className="Vending__productsToolbar">
           {!all_products_free && user && (
-            <Stack.Item fontSize="16px" color="green">
+            <Stack.Item
+              className="Vending__balance"
+              fontSize="16px"
+              color="green"
+            >
               {user?.cash || 0}
               {displayed_currency_name}
               <Icon name={displayed_currency_icon} color="gold" />
             </Stack.Item>
           )}
-          <Stack.Item>
+          <Stack.Item grow>
             <Input
+              className="Vending__search"
               onChange={setStockSearch}
               expensive
               placeholder="Search..."
@@ -220,8 +279,7 @@ const ProductDisplay = (props: {
           </Stack.Item>
           <LayoutToggle state={toggleLayout} setState={setToggleLayout} />
         </Stack>
-      }
-    >
+      )}
       {inventory
         .filter((product) => {
           if (!stockSearch && 'category' in product) {
@@ -308,13 +366,20 @@ const ProductGrid = (props: any) => {
   return (
     <ImageButton
       {...baseProps}
+      className={classes([
+        'Vending__product',
+        'Vending__product--grid',
+        product.premium && 'Vending__product--premium',
+      ])}
       tooltip={capitalizeAll(product.name)}
       buttonsAlt={
-        <Stack fontSize={0.8}>
+        <Stack className="Vending__productMeta" fontSize={0.8}>
           <Stack.Item grow textAlign={'left'}>
             <ProductPrice {...priceProps} />
           </Stack.Item>
-          <Stack.Item color={'lightgray'}>x{remaining}</Stack.Item>
+          <Stack.Item className="Vending__stock" color={'lightgray'}>
+            x{remaining}
+          </Stack.Item>
         </Stack>
       }
     >
@@ -328,12 +393,22 @@ const ProductList = (props: any) => {
   const { ...priceProps } = props;
 
   return (
-    <ImageButton {...baseProps} fluid imageSize={32}>
-      <Stack textAlign={'right'} align="center">
-        <Stack.Item grow textAlign={'left'}>
+    <ImageButton
+      {...baseProps}
+      className={classes([
+        'Vending__product',
+        'Vending__product--list',
+        product.premium && 'Vending__product--premium',
+      ])}
+      fluid
+      imageSize={32}
+    >
+      <Stack className="Vending__productRow" textAlign={'right'} align="center">
+        <Stack.Item className="Vending__productName" grow textAlign={'left'}>
           {capitalizeAll(product.name)}
         </Stack.Item>
         <Stack.Item
+          className="Vending__stock"
           width={3.5}
           fontSize={0.8}
           color={'rgba(255, 255, 255, 0.5)'}
@@ -341,6 +416,7 @@ const ProductList = (props: any) => {
           {remaining} left
         </Stack.Item>
         <Stack.Item
+          className="Vending__priceCell"
           width={3.5}
           style={{ marginRight: !colorable ? '32px' : '' }}
         >
@@ -368,6 +444,7 @@ const ProductColorSelect = (props: ProductColorSelectProps) => {
 
   return (
     <Button
+      className="Vending__colorButton"
       width={fluid ? '32px' : '20px'}
       icon={'palette'}
       color={'transparent'}
@@ -397,7 +474,7 @@ const ProductPrice = (props: ProductPriceProps) => {
     standardPrice = `${redPrice}`;
   }
   return (
-    <Stack.Item fontSize={0.85} color={'gold'}>
+    <Stack.Item className="Vending__price" fontSize={0.85} color={'gold'}>
       {standardPrice}
       {!free && displayed_currency_name}
     </Stack.Item>
@@ -417,9 +494,14 @@ const CategorySelector = (props: {
   const { categories, selectedCategory, onSelect } = props;
 
   return (
-    <Section>
+    <Section className="Vending__categories">
       {Object.entries(categories).map(([name, category]) => (
         <Button
+          className={classes([
+            'Vending__categoryButton',
+            name === 'Premium' && 'Vending__categoryButton--premium',
+            name === 'Contraband' && 'Vending__categoryButton--contraband',
+          ])}
           key={name}
           selected={name === selectedCategory}
           color={CATEGORY_COLORS[name]}

@@ -1,0 +1,240 @@
+/**
+ * Copyright (c) 2020 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ *
+ * Psychonaut Station panel customizations.
+ */
+
+.Panel--modern {
+  --color-base: #0b1017;
+  --color-section: #101722;
+  --color-border-primary: #223044;
+  --color-label: #8ea4bd;
+  --chat-text-color: #d8e4f0;
+  --panel-modern-accent: #5da7ff;
+  --panel-modern-active-bg: #19304a;
+  --panel-modern-active-border: #37628f;
+  --panel-modern-border: #223044;
+  --panel-modern-chat-bg: #080d13;
+  --panel-modern-chat-glow: rgba(93, 167, 255, 0.055);
+  --panel-modern-hover-bg: #141e2b;
+  --panel-modern-hover-bg-strong: #172233;
+  --panel-modern-hover-border: #2c3b50;
+  --panel-modern-muted: #8ea4bd;
+  --panel-modern-reconnected-bg: #101722;
+  --panel-modern-toolbar-bg: #0d141d;
+  --panel-modern-unread-border: #0b1017;
+  --panel-modern-strong-text: #f0f6ff;
+  background-color: var(--color-base);
+
+  &.Panel--theme-midnight {
+    --color-base: #16161a;
+    --color-section: #27272d;
+    --color-border-primary: #3c3c42;
+    --color-label: #859db5;
+    --chat-text-color: #d4dfec;
+    --panel-modern-accent: #5a7a8f;
+    --panel-modern-active-bg: #2b2b33;
+    --panel-modern-active-border: #5a7a8f;
+    --panel-modern-border: #3c3c42;
+    --panel-modern-chat-bg: #16161a;
+    --panel-modern-chat-glow: rgba(90, 122, 143, 0.08);
+    --panel-modern-hover-bg: #36363c;
+    --panel-modern-hover-bg-strong: #36363c;
+    --panel-modern-hover-border: #3c3c42;
+    --panel-modern-muted: #859db5;
+    --panel-modern-reconnected-bg: #27272d;
+    --panel-modern-toolbar-bg: #27272d;
+    --panel-modern-unread-border: #16161a;
+    --panel-modern-strong-text: #d4dfec;
+  }
+
+  .theme-light & {
+    --color-base: #f4f6f8;
+    --color-section: #ffffff;
+    --color-border-primary: #c8d2de;
+    --color-label: #52677d;
+    --chat-text-color: #142333;
+    --panel-modern-accent: #2f7dc1;
+    --panel-modern-active-bg: #d7e9fb;
+    --panel-modern-active-border: #2f7dc1;
+    --panel-modern-border: #c8d2de;
+    --panel-modern-chat-bg: #f4f6f8;
+    --panel-modern-chat-glow: rgba(47, 125, 193, 0.08);
+    --panel-modern-hover-bg: #dbe6f2;
+    --panel-modern-hover-bg-strong: #e8edf3;
+    --panel-modern-hover-border: #c8d2de;
+    --panel-modern-muted: #52677d;
+    --panel-modern-reconnected-bg: #ffffff;
+    --panel-modern-toolbar-bg: #ffffff;
+    --panel-modern-unread-border: #ffffff;
+    --panel-modern-strong-text: #142333;
+  }
+
+  .Section {
+    border-radius: 0;
+    border-color: var(--panel-modern-border);
+    background-color: var(--color-section);
+  }
+
+  .Panel__toolbar {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+      var(--panel-modern-toolbar-bg);
+    border-bottom-color: var(--panel-modern-border);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .Panel__toolbarContent {
+    min-height: 2.35em;
+    padding: 0.2em 0.15em;
+    gap: 0.3em;
+  }
+
+  .Panel__toolbarButton,
+  .ChatTabs__add {
+    min-width: 2.15em;
+    min-height: 2.05em;
+    border: 1px solid transparent;
+    border-radius: 0.25em;
+    color: var(--panel-modern-muted);
+
+    &:hover {
+      border-color: var(--panel-modern-hover-border);
+      background-color: var(--panel-modern-hover-bg-strong);
+      color: var(--panel-modern-strong-text);
+    }
+
+    &.Button--selected {
+      border-color: var(--panel-modern-active-border);
+      background-color: var(--panel-modern-active-bg);
+      color: var(--panel-modern-strong-text);
+    }
+  }
+
+  .ChatTabs {
+    min-width: 0;
+  }
+
+  .Tabs {
+    gap: 0.2em;
+  }
+
+  .Tabs__tab {
+    min-height: 2.05em;
+    padding-inline: 0.75em;
+    border: 1px solid transparent;
+    border-radius: 0.25em;
+    color: var(--panel-modern-muted);
+    background-color: transparent;
+
+    &:hover {
+      border-color: var(--panel-modern-hover-border);
+      background-color: var(--panel-modern-hover-bg);
+      color: var(--panel-modern-strong-text);
+    }
+  }
+
+  .Tabs__tab--selected {
+    border-color: var(--panel-modern-active-border);
+    background-color: var(--panel-modern-active-bg);
+    color: var(--panel-modern-strong-text);
+    box-shadow: inset 0 -0.18em 0 var(--panel-modern-accent);
+  }
+
+  .UnreadCount {
+    top: -0.55em;
+    right: -0.55em;
+    min-width: 1.2em;
+    border: 1px solid var(--panel-modern-unread-border);
+    background-color: #ff5f6d;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .Panel__chatSection {
+    border-top-width: 0;
+  }
+
+  #chat-pane {
+    background:
+      linear-gradient(
+        180deg,
+        var(--panel-modern-chat-glow) 0,
+        transparent 5em
+      ),
+      var(--panel-modern-chat-bg);
+  }
+
+  .Chat {
+    padding: 0.55em 0.7em 0.8em;
+    color: var(--chat-text-color);
+  }
+
+  .ChatMessage {
+    padding-block: 0.05em;
+  }
+
+  .ChatMessage--highlighted {
+    border-left-color: #ffd166;
+    background-color: rgba(255, 209, 102, 0.055);
+  }
+
+  .Chat__highlight {
+    background-color: #ffd166;
+  }
+
+  .theme-light & .Chat__highlight {
+    color: #142333;
+  }
+
+  .Chat__reconnected {
+    color: var(--panel-modern-muted);
+
+    &:before {
+      background-color: var(--panel-modern-reconnected-bg);
+      color: #ff6b78;
+      border: 1px solid #3a2630;
+    }
+
+    &:after {
+      border-bottom-color: #652b38;
+    }
+  }
+
+  .theme-light & .Chat__reconnected {
+    &:before {
+      border-color: #c8d2de;
+    }
+
+    &:after {
+      border-bottom-color: #c8d2de;
+    }
+  }
+
+  .Ping {
+    min-height: 2.05em;
+    border-color: var(--panel-modern-hover-border);
+    border-radius: 0.25em;
+    background-color: var(--panel-modern-hover-bg-strong);
+    color: var(--panel-modern-strong-text);
+  }
+
+  .Notifications {
+    top: 0.75em;
+    left: 0.75em;
+    right: 0.75em;
+  }
+
+  .Notification {
+    border: 1px solid #6b2b38;
+    background-color: #32151d;
+    color: #ffe5e9;
+  }
+
+  .theme-light & .Notification {
+    border-color: #c8d2de;
+    background-color: #ffffff;
+    color: #142333;
+  }
+}

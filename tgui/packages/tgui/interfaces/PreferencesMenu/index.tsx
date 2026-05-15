@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
+import { classes } from 'tgui-core/react';
 import { exhaustiveCheck } from 'tgui-core/exhaustive';
 import { fetchRetry } from 'tgui-core/http';
 
@@ -6,6 +7,10 @@ import { resolveAsset } from '../../assets';
 import { useBackend } from '../../backend';
 import { Window } from '../../layouts';
 import { logger } from '../../logging';
+import {
+  getPsychonautWindowClasses,
+  usePsychonautPanelSettings,
+} from '../../psychonaut/usePanelSettings';
 import { LoadingScreen } from '../common/LoadingScreen';
 import { CharacterPreferenceWindow } from './CharacterPreferences';
 import { GamePreferenceWindow } from './GamePreferences';
@@ -19,9 +24,17 @@ import { RandomToggleState } from './useRandomToggleState';
 import { ServerPrefs } from './useServerPrefs';
 
 export function PreferencesMenu(props) {
+  const panelSettings = usePsychonautPanelSettings();
+  const className = classes([
+    ...getPsychonautWindowClasses('PreferencesMenu', panelSettings),
+    `PreferencesMenu--${panelSettings.panelLayoutStyle}`,
+    `PreferencesMenu--theme-${panelSettings.panelColorTheme}`,
+    `PreferencesMenu--${panelSettings.theme}`,
+  ]);
+
   return (
     <Window width={980} height={770}>
-      <Window.Content>
+      <Window.Content className={className}>
         <Suspense fallback={<LoadingScreen />}>
           <PrefsWindowInner />
         </Suspense>

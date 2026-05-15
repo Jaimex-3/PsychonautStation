@@ -8,10 +8,15 @@ import {
   Stack,
 } from 'tgui-core/components';
 import { clamp } from 'tgui-core/math';
+import { classes } from 'tgui-core/react';
 import { createSearch, toTitleCase } from 'tgui-core/string';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
+import {
+  getPsychonautWindowClasses,
+  usePsychonautPanelSettings,
+} from '../psychonaut/usePanelSettings';
 import { SearchBar } from './common/SearchBar';
 
 type Recipe = {
@@ -109,17 +114,25 @@ const filterRecipeList = (
 export const StackCrafting = (_props) => {
   const { data } = useBackend<StackCraftingProps>();
   const { amount, recipes = {} } = data;
+  const panelSettings = usePsychonautPanelSettings();
 
   const [searchText, setSearchText] = useState('');
   const testSearch = createSearch(searchText, (item: string) => item);
   const filteredRecipes = filterRecipeList(recipes, testSearch);
 
   const height: number = clamp(96 + Object.keys(recipes).length * 37, 250, 500);
+  const craftingClassName = classes([
+    ...getPsychonautWindowClasses('StackCrafting', panelSettings),
+    `Crafting--${panelSettings.panelLayoutStyle}`,
+    `Crafting--theme-${panelSettings.panelColorTheme}`,
+    `Crafting--${panelSettings.theme}`,
+  ]);
 
   return (
     <Window width={400} height={height}>
-      <Window.Content>
+      <Window.Content className={craftingClassName}>
         <Section
+          className="StackCrafting__panel"
           fill
           scrollable
           title={`Amount: ${amount}`}
@@ -135,7 +148,9 @@ export const StackCrafting = (_props) => {
           {filteredRecipes ? (
             <RecipeListBox recipes={filteredRecipes} />
           ) : (
-            <NoticeBox>No recipes found.</NoticeBox>
+            <NoticeBox className="StackCrafting__empty">
+              No recipes found.
+            </NoticeBox>
           )}
         </Section>
       </Window.Content>
@@ -153,16 +168,10 @@ const RecipeListBox = (props: RecipeListProps) => {
         if (isRecipeList(recipe)) {
           return (
             <Collapsible
+              className="StackCrafting__category"
               key={title}
               title={toTitleCase(title || '')}
               child_mt={0}
-              childStyles={{
-                padding: '0.5em',
-                backgroundColor: 'rgba(62, 97, 137, 0.15)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderTop: 'none',
-                borderRadius: '0 0 0.33em 0.33em',
-              }}
             >
               <RecipeListBox recipes={recipe} />
             </Collapsible>
@@ -201,6 +210,7 @@ const Multipliers = (props: MultiplierProps) => {
     if (maxM >= multiplier) {
       finalResult.push(
         <Button
+          className="StackCrafting__multiplier"
           bold
           color={'transparent'}
           fontSize={0.75}
@@ -221,6 +231,7 @@ const Multipliers = (props: MultiplierProps) => {
   if (multipliers.indexOf(maxM) === -1) {
     finalResult.push(
       <Button
+        className="StackCrafting__multiplier"
         bold
         color={'transparent'}
         fontSize={0.75}
@@ -262,34 +273,48 @@ const RecipeBox = (props: RecipeBoxProps) => {
   const maxMultiplier = buildMultiplier(recipe, amount);
 
   return (
-    <ImageButton
-      fluid
-      base64={
-        image
-      } /* Use base64 image if we have it. DmIcon cannot paint grayscale images yet */
-      dmIcon={icon}
-      dmIconState={icon_state}
-      imageSize={32}
-      disabled={!maxMultiplier}
-      buttons={
-        max_res_amount > 1 &&
-        maxMultiplier > 1 && (
-          <Multipliers recipe={recipe} maxMultiplier={maxMultiplier} />
-        )
-      }
-      onClick={() =>
-        act('make', {
-          ref: ref,
-          multiplier: 1,
-        })
-      }
+    <div
+      className={classes([
+        'StackCrafting__recipe',
+        !maxMultiplier && 'StackCrafting__recipe--disabled',
+      ])}
     >
-      <Stack textAlign={'left'}>
-        <Stack.Item grow>{toTitleCase(buttonName)}</Stack.Item>
-        <Stack.Item align={'center'} fontSize={0.8} color={'gray'}>
-          {reqSheets}
-        </Stack.Item>
-      </Stack>
-    </ImageButton>
+      <ImageButton
+        fluid
+        base64={
+          image
+        } /* Use base64 image if we have it. DmIcon cannot paint grayscale images yet */
+        dmIcon={icon}
+        dmIconState={icon_state}
+        imageSize={32}
+        disabled={!maxMultiplier}
+        buttons={
+          max_res_amount > 1 &&
+          maxMultiplier > 1 && (
+            <Multipliers recipe={recipe} maxMultiplier={maxMultiplier} />
+          )
+        }
+        onClick={() =>
+          act('make', {
+            ref: ref,
+            multiplier: 1,
+          })
+        }
+      >
+        <Stack className="StackCrafting__recipeContent" textAlign={'left'}>
+          <Stack.Item className="StackCrafting__recipeName" grow>
+            {toTitleCase(buttonName)}
+          </Stack.Item>
+          <Stack.Item
+            className="StackCrafting__recipeReq"
+            align={'center'}
+            fontSize={0.8}
+            color={'gray'}
+          >
+            {reqSheets}
+          </Stack.Item>
+        </Stack>
+      </ImageButton>
+    </div>
   );
 };

@@ -4,11 +4,15 @@ import type { HighlightSetting, HighlightState, SettingsState } from './types';
 
 export const defaultSettings: SettingsState = {
   adminMusicVolume: 0.5,
+  chatFontSize: 13,
   coloredNames: true,
   fontFamily: FONTS[0],
   fontSize: 13,
   initialized: false,
   lineHeight: 1.2,
+  // Psychonaut Station panel customization defaults.
+  panelColorTheme: 'blue',
+  panelLayoutStyle: 'modern',
   statFontSize: 12,
   statLinked: true,
   statTabsStyle: 'default',

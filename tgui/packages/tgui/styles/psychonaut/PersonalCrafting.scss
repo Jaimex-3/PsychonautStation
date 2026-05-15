@@ -1,0 +1,440 @@
+.Crafting--modern {
+  &.PersonalCrafting,
+  &.StackCrafting {
+    --crafting-base: var(--psychonaut-base);
+    --crafting-surface: var(--psychonaut-surface);
+    --crafting-panel: var(--psychonaut-panel);
+    --crafting-raised: var(--psychonaut-raised);
+    --crafting-border: var(--psychonaut-border);
+    --crafting-border-strong: var(--psychonaut-border-strong);
+    --crafting-selected: var(--psychonaut-selected);
+    --crafting-selected-border: var(--psychonaut-selected-border);
+    --crafting-accent: var(--psychonaut-accent);
+    --crafting-text: var(--psychonaut-text);
+    --crafting-muted: var(--psychonaut-muted);
+    --crafting-faint: var(--psychonaut-faint);
+
+    background: var(--crafting-base);
+    color: var(--crafting-text);
+  }
+
+  .PersonalCrafting__layout {
+    gap: 0;
+  }
+
+  .PersonalCrafting__sidebar {
+    min-width: 200px;
+    padding: 8px;
+    background: var(--crafting-panel);
+    border-right: 1px solid var(--crafting-border);
+  }
+
+  .PersonalCrafting__main {
+    min-width: 0;
+    background: var(--crafting-base);
+  }
+
+  .PersonalCrafting__search,
+  .PersonalCrafting__viewTabs,
+  .PersonalCrafting__filters,
+  .PersonalCrafting__modeControls {
+    flex-shrink: 0;
+  }
+
+  .PersonalCrafting__search {
+    margin-bottom: 8px;
+  }
+
+  .PersonalCrafting__viewTabs {
+    margin-bottom: 8px;
+    padding: 3px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-surface);
+  }
+
+  .PersonalCrafting__viewTabs--cooking {
+    padding: 2px;
+  }
+
+  .PersonalCrafting__viewTabs .Tabs {
+    display: flex;
+    width: 100%;
+    gap: 2px;
+  }
+
+  .PersonalCrafting__viewTabs--cooking .Tabs {
+    gap: 1px;
+  }
+
+  .PersonalCrafting__viewTab,
+  .PersonalCrafting__navTab {
+    border-radius: 4px;
+  }
+
+  .PersonalCrafting__viewTab {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 28px;
+    padding: 0 6px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.1;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .PersonalCrafting__viewTabs--cooking .PersonalCrafting__viewTab {
+    padding: 0 3px;
+    overflow: visible;
+    font-size: 11px;
+    text-overflow: clip;
+  }
+
+  .PersonalCrafting__viewTab:hover,
+  .PersonalCrafting__navTab:hover {
+    background: var(--crafting-raised);
+  }
+
+  .PersonalCrafting__viewTab.Tabs__tab--selected,
+  .PersonalCrafting__navTab.Tabs__tab--selected,
+  .PersonalCrafting__viewTab.Button--selected,
+  .PersonalCrafting__navTab.Button--selected {
+    background: var(--crafting-selected);
+    color: var(--crafting-text);
+    border-color: var(--crafting-selected-border);
+  }
+
+  .PersonalCrafting__navScroll {
+    min-height: 0;
+    margin: 0 -4px;
+    padding: 0 4px;
+  }
+
+  .PersonalCrafting__navTab {
+    margin-bottom: 3px;
+    border: 1px solid transparent;
+    color: var(--crafting-muted);
+  }
+
+  .PersonalCrafting__navLabel {
+    align-items: center;
+    min-height: 28px;
+    text-transform: capitalize;
+  }
+
+  .PersonalCrafting__count,
+  .PersonalCrafting__materialCount {
+    min-width: 24px;
+    padding: 0 6px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 999px;
+    background: var(--crafting-surface);
+    color: var(--crafting-accent);
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .PersonalCrafting__materialTab {
+    align-items: center;
+    min-width: 0;
+  }
+
+  .PersonalCrafting__materialIcon {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
+  }
+
+  .PersonalCrafting__materialName {
+    color: var(--crafting-text);
+  }
+
+  .PersonalCrafting__subfilters {
+    margin-top: 6px;
+    padding: 6px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: rgba(8, 13, 19, 0.55);
+    font-size: 0.95em;
+  }
+
+  &.Crafting--light .PersonalCrafting__subfilters {
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .PersonalCrafting__subgroupTitle {
+    color: var(--crafting-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .PersonalCrafting__filters {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--crafting-border);
+  }
+
+  .PersonalCrafting__filterButton,
+  .PersonalCrafting__modeButton {
+    margin-top: 4px;
+    background: var(--crafting-surface);
+    color: var(--crafting-muted);
+  }
+
+  .PersonalCrafting__filterButton.Button--selected {
+    background: var(--crafting-selected);
+    border-color: var(--crafting-selected-border);
+    color: var(--crafting-text);
+  }
+
+  .PersonalCrafting__modeControls {
+    margin-top: 8px;
+  }
+
+  .PersonalCrafting__modeButton {
+    border: 1px solid var(--crafting-border-strong);
+  }
+
+  .PersonalCrafting__modeButton--selected {
+    background: var(--crafting-selected);
+    border-color: var(--crafting-selected-border);
+    color: var(--crafting-text);
+  }
+
+  .PersonalCrafting__recipeList {
+    padding: 8px;
+  }
+
+  .PersonalCrafting__recipeCard {
+    margin-bottom: 8px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: linear-gradient(
+      180deg,
+      var(--crafting-panel),
+      var(--crafting-surface)
+    );
+    box-shadow: inset 0 1px 0 rgba(216, 228, 240, 0.04);
+  }
+
+  .PersonalCrafting__recipeCard .Section__content {
+    padding: 10px;
+  }
+
+  .PersonalCrafting__recipeCard--compact .Section__content {
+    padding: 7px 9px;
+  }
+
+  .PersonalCrafting__recipeCard--muted {
+    opacity: 0.72;
+  }
+
+  .PersonalCrafting__recipeCard:hover {
+    border-color: var(--crafting-border-strong);
+  }
+
+  .PersonalCrafting__recipeBody,
+  .PersonalCrafting__compactRow {
+    gap: 8px;
+  }
+
+  .PersonalCrafting__recipeIconFrame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-base);
+  }
+
+  .PersonalCrafting__recipeIconFrame .PersonalCrafting__recipeIcon {
+    transform: scale(1.5);
+  }
+
+  .PersonalCrafting__recipeIcon,
+  .PersonalCrafting__atomIcon {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.65));
+  }
+
+  .PersonalCrafting__recipeTitle {
+    margin-bottom: 5px;
+    color: var(--crafting-text);
+    text-transform: capitalize;
+  }
+
+  .PersonalCrafting__recipeDesc,
+  .PersonalCrafting__compactReqs,
+  .PersonalCrafting__meta,
+  .PersonalCrafting__atomLabel {
+    color: var(--crafting-muted);
+  }
+
+  .PersonalCrafting__compactReqs {
+    max-height: 2.8em;
+    overflow: hidden;
+    line-height: 1.35;
+    text-transform: capitalize;
+  }
+
+  .PersonalCrafting__specialEffect {
+    margin: 8px 0;
+    color: #ff9ad5;
+  }
+
+  .PersonalCrafting__recipeGroups {
+    text-transform: capitalize;
+  }
+
+  .PersonalCrafting__group {
+    margin-top: 8px;
+  }
+
+  .PersonalCrafting__groupTitle {
+    align-items: center;
+    margin: 9px 0 5px;
+  }
+
+  .PersonalCrafting__groupTitleText {
+    padding: 0 8px;
+    color: var(--crafting-faint);
+    font-size: 11px;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .PersonalCrafting__atom {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    margin: 2px 6px 2px 0;
+    padding: 2px 7px 2px 3px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 999px;
+    background: rgba(8, 13, 19, 0.45);
+  }
+
+  &.Crafting--light .PersonalCrafting__atom {
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .PersonalCrafting__actionRail {
+    min-width: 116px;
+    padding-left: 8px;
+    border-left: 1px solid var(--crafting-border);
+  }
+
+  .PersonalCrafting__makeButton {
+    background: var(--crafting-selected);
+    border-color: var(--crafting-selected-border);
+    color: var(--crafting-text);
+  }
+
+  .PersonalCrafting__makeButton:hover,
+  .PersonalCrafting__massButton:hover,
+  .StackCrafting__multiplier:hover {
+    border-color: var(--crafting-accent);
+  }
+
+  .PersonalCrafting__massButton {
+    background: var(--crafting-raised);
+  }
+
+  .PersonalCrafting__steps {
+    margin: 4px 0 0;
+    padding-left: 18px;
+    color: var(--crafting-muted);
+  }
+
+  .PersonalCrafting__empty,
+  .PersonalCrafting__loadMore {
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-panel);
+  }
+
+  .PersonalCrafting__loadMore {
+    margin-bottom: 8px;
+    padding: 10px;
+    color: var(--crafting-accent);
+    cursor: var(--cursor-pointer);
+    text-align: center;
+  }
+
+  .PersonalCrafting__loadMore:hover {
+    background: var(--crafting-raised);
+  }
+
+  .StackCrafting__panel {
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-panel);
+  }
+
+  .StackCrafting__panel .Section__title {
+    color: var(--crafting-text);
+  }
+
+  .StackCrafting__category {
+    margin-bottom: 6px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-surface);
+  }
+
+  .StackCrafting__category .Collapsible__content {
+    padding: 6px;
+    border-top: 1px solid var(--crafting-border);
+    background: rgba(8, 13, 19, 0.45);
+  }
+
+  &.Crafting--light .StackCrafting__category .Collapsible__content {
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .StackCrafting__recipe {
+    margin-bottom: 5px;
+  }
+
+  .StackCrafting__recipe .ImageButton,
+  .StackCrafting__recipe .Button {
+    border: 1px solid var(--crafting-border);
+    border-radius: 6px;
+    background: var(--crafting-surface);
+  }
+
+  .StackCrafting__recipe .ImageButton:hover {
+    border-color: var(--crafting-border-strong);
+    background: var(--crafting-raised);
+  }
+
+  .StackCrafting__recipe--disabled {
+    opacity: 0.65;
+  }
+
+  .StackCrafting__recipeName {
+    color: var(--crafting-text);
+  }
+
+  .StackCrafting__recipeReq {
+    color: var(--crafting-muted);
+  }
+
+  .StackCrafting__multiplier {
+    margin-left: 3px;
+    border: 1px solid var(--crafting-border);
+    border-radius: 4px;
+    background: var(--crafting-raised);
+    color: var(--crafting-accent);
+  }
+
+  .StackCrafting__empty {
+    border: 1px solid var(--crafting-border);
+    background: var(--crafting-surface);
+  }
+}

@@ -4,19 +4,22 @@ import { useState } from 'react';
 import {
   Box,
   Button,
-  Divider,
   Icon,
   Input,
   NoticeBox,
-  Section,
   Stack,
   Tabs,
   VirtualList,
 } from 'tgui-core/components';
+import { classes } from 'tgui-core/react';
 import { createSearch } from 'tgui-core/string';
 
 import { useBackend } from '../../backend';
 import { Window } from '../../layouts';
+import {
+  getPsychonautWindowClasses,
+  usePsychonautPanelSettings,
+} from '../../psychonaut/usePanelSettings';
 import { CATEGORY_ICONS_COOKING, CATEGORY_ICONS_CRAFTING } from './constants';
 import { FoodtypeContent } from './content/FoodtypeContent';
 import { MaterialContent } from './content/MaterialContent';
@@ -33,6 +36,7 @@ import {
 
 export function PersonalCrafting(props: any) {
   const { act, data } = useBackend<CraftingData>();
+  const panelSettings = usePsychonautPanelSettings();
   const {
     mode,
     busy,
@@ -193,15 +197,20 @@ export function PersonalCrafting(props: any) {
         : 30;
   const displayLimit = pageSize * pages;
   const content = document.getElementById('content');
+  const craftingClassName = classes([
+    ...getPsychonautWindowClasses('PersonalCrafting', panelSettings),
+    `Crafting--${panelSettings.panelLayoutStyle}`,
+    `Crafting--theme-${panelSettings.panelColorTheme}`,
+    `Crafting--${panelSettings.theme}`,
+  ]);
 
   return (
     <Window width={700} height={720}>
-      <Window.Content>
-        <Stack fill>
-          <Stack.Item width="200px">
-            <Section fill>
-              <Stack fill vertical justify={'space-between'}>
-                <Stack.Item>
+      <Window.Content className={craftingClassName}>
+        <Stack fill className="PersonalCrafting__layout">
+          <Stack.Item width="200px" className="PersonalCrafting__sidebar">
+            <Stack fill vertical justify={'space-between'}>
+              <Stack.Item className="PersonalCrafting__search">
                   <Input
                     autoFocus
                     expensive
@@ -218,9 +227,16 @@ export function PersonalCrafting(props: any) {
                     fluid
                   />
                 </Stack.Item>
-                <Stack.Item>
+                <Stack.Item
+                  className={classes([
+                    'PersonalCrafting__viewTabs',
+                    mode === MODE.cooking &&
+                      'PersonalCrafting__viewTabs--cooking',
+                  ])}
+                >
                   <Tabs fluid textAlign="center">
                     <Tabs.Tab
+                      className="PersonalCrafting__viewTab"
                       selected={tabMode === TABS.category}
                       onClick={() => {
                         if (tabMode === TABS.category) {
@@ -239,6 +255,7 @@ export function PersonalCrafting(props: any) {
                     </Tabs.Tab>
                     {mode === MODE.cooking && (
                       <Tabs.Tab
+                        className="PersonalCrafting__viewTab"
                         selected={tabMode === TABS.foodtype}
                         onClick={() => {
                           if (tabMode === TABS.foodtype) {
@@ -257,6 +274,7 @@ export function PersonalCrafting(props: any) {
                       </Tabs.Tab>
                     )}
                     <Tabs.Tab
+                      className="PersonalCrafting__viewTab"
                       selected={tabMode === TABS.material}
                       onClick={() => {
                         if (tabMode === TABS.material) {
@@ -271,13 +289,18 @@ export function PersonalCrafting(props: any) {
                     </Tabs.Tab>
                   </Tabs>
                 </Stack.Item>
-                <Stack.Item grow m={-1} style={{ overflowY: 'auto' }}>
-                  <Box height={'100%'} p={1}>
+                <Stack.Item
+                  grow
+                  className="PersonalCrafting__navScroll"
+                  style={{ overflowY: 'auto' }}
+                >
+                  <Box height={'100%'}>
                     <Tabs vertical>
                       {tabMode === TABS.foodtype &&
                         mode === MODE.cooking &&
                         foodtypes.map((foodtype) => (
                           <Tabs.Tab
+                            className="PersonalCrafting__navTab"
                             key={foodtype}
                             selected={
                               activeType === foodtype && searchText.length === 0
@@ -303,6 +326,7 @@ export function PersonalCrafting(props: any) {
                       {tabMode === TABS.material &&
                         filteredMaterials.map((material) => (
                           <Tabs.Tab
+                            className="PersonalCrafting__navTab"
                             key={material.atom_id}
                             selected={
                               activeMaterial === material.atom_id &&
@@ -328,6 +352,7 @@ export function PersonalCrafting(props: any) {
                       {tabMode === TABS.category &&
                         categories.map((category) => (
                           <Tabs.Tab
+                            className="PersonalCrafting__navTab"
                             key={category}
                             selected={
                               activeCategory === category &&
@@ -347,6 +372,7 @@ export function PersonalCrafting(props: any) {
                             <Stack vertical>
                               <Stack.Item>
                                 <Stack
+                                  className="PersonalCrafting__navLabel"
                                   // hack, for some reason the standard padding
                                   // disappears with the extra food category
                                   // rendering, so i'm manually doing it here
@@ -357,7 +383,10 @@ export function PersonalCrafting(props: any) {
                                       : 0
                                   }
                                 >
-                                  <Stack.Item width="14px" textAlign="center">
+                                  <Stack.Item
+                                    width="18px"
+                                    textAlign="center"
+                                  >
                                     <Icon
                                       color={
                                         category === 'Blood Cult'
@@ -378,7 +407,7 @@ export function PersonalCrafting(props: any) {
                                     {category}
                                   </Stack.Item>
                                   {category === 'Can Make' && (
-                                    <Stack.Item>
+                                    <Stack.Item className="PersonalCrafting__count">
                                       {Object.keys(craftability).length}
                                     </Stack.Item>
                                   )}
@@ -387,7 +416,7 @@ export function PersonalCrafting(props: any) {
                               {/* Foods are further categorized by cuisine and dish type */}
                               {category === 'Foods' &&
                                 activeCategory === category && (
-                                  <Stack.Item fontSize="0.95em">
+                                  <Stack.Item className="PersonalCrafting__subfilters">
                                     <Stack vertical pb={1}>
                                       <Stack.Item>
                                         <SubGroupTitle title="Cuisines" />
@@ -486,9 +515,9 @@ export function PersonalCrafting(props: any) {
                     </Tabs>
                   </Box>
                 </Stack.Item>
-                <Stack.Item>
-                  <Divider />
+                <Stack.Item className="PersonalCrafting__filters">
                   <Button.Checkbox
+                    className="PersonalCrafting__filterButton"
                     fluid
                     checked={display_craftable_only}
                     onClick={() => {
@@ -498,6 +527,7 @@ export function PersonalCrafting(props: any) {
                     Can make only
                   </Button.Checkbox>
                   <Button.Checkbox
+                    className="PersonalCrafting__filterButton"
                     fluid
                     checked={display_compact}
                     onClick={() => act('toggle_compact')}
@@ -506,19 +536,19 @@ export function PersonalCrafting(props: any) {
                   </Button.Checkbox>
                 </Stack.Item>
                 {!forced_mode && (
-                  <Stack.Item>
+                  <Stack.Item className="PersonalCrafting__modeControls">
                     <Stack textAlign="center">
                       <Stack.Item grow>
                         <Button.Checkbox
+                          className={classes([
+                            'PersonalCrafting__modeButton',
+                            mode === MODE.crafting &&
+                              'PersonalCrafting__modeButton--selected',
+                          ])}
                           fluid
                           lineHeight={2}
                           checked={mode === MODE.crafting}
                           icon="hammer"
-                          style={{
-                            border:
-                              '2px solid ' +
-                              (mode === MODE.crafting ? '#20b142' : '#333'),
-                          }}
                           onClick={() => {
                             if (mode === MODE.crafting) {
                               return;
@@ -533,15 +563,15 @@ export function PersonalCrafting(props: any) {
                       </Stack.Item>
                       <Stack.Item grow>
                         <Button.Checkbox
+                          className={classes([
+                            'PersonalCrafting__modeButton',
+                            mode === MODE.cooking &&
+                              'PersonalCrafting__modeButton--selected',
+                          ])}
                           fluid
                           lineHeight={2}
                           checked={mode === MODE.cooking}
                           icon="utensils"
-                          style={{
-                            border:
-                              '2px solid ' +
-                              (mode === MODE.cooking ? '#20b142' : '#333'),
-                          }}
                           onClick={() => {
                             if (mode === MODE.cooking) {
                               return;
@@ -558,14 +588,11 @@ export function PersonalCrafting(props: any) {
                   </Stack.Item>
                 )}
               </Stack>
-            </Section>
           </Stack.Item>
-          <Stack.Item grow my={-1}>
+          <Stack.Item grow className="PersonalCrafting__main">
             <Box
+              className="PersonalCrafting__recipeList"
               height="100%"
-              pr={1}
-              pt={1}
-              mr={-1}
               style={{ overflowY: 'auto' }}
             >
               {recipes.length > 0 ? (
@@ -600,20 +627,18 @@ export function PersonalCrafting(props: any) {
                     )}
                 </VirtualList>
               ) : (
-                <NoticeBox m={1} p={1}>
+                <NoticeBox className="PersonalCrafting__empty" m={1} p={1}>
                   No recipes found.
                 </NoticeBox>
               )}
               {recipes.length > displayLimit && (
-                <Section
-                  mb={1}
-                  textAlign="center"
-                  style={{ cursor: 'pointer' }}
+                <Box
+                  className="PersonalCrafting__loadMore"
                   onClick={() => setPages(pages + 1)}
                 >
                   Load {Math.min(pageSize, recipes.length - displayLimit)}{' '}
                   more...
-                </Section>
+                </Box>
               )}
             </Box>
           </Stack.Item>

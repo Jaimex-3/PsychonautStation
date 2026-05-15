@@ -94,8 +94,8 @@ export function CharacterPreferenceWindow(props) {
   }
 
   return (
-    <Stack vertical fill>
-      <Stack.Item>
+    <Stack vertical fill className="PreferencesMenu__Window PreferencesMenu__Window--character">
+      <Stack.Item className="PreferencesMenu__Profiles">
         <CharacterProfiles
           activeSlot={data.active_slot - 1}
           onClick={(slot) => {
@@ -110,8 +110,8 @@ export function CharacterPreferenceWindow(props) {
         <Stack.Item align="center">Become a patron for more slots!</Stack.Item>
       )}
       <Stack.Divider />
-      <Stack.Item>
-        <Stack fill>
+      <Stack.Item className="PreferencesMenu__NavRow">
+        <Stack fill className="PreferencesMenu__NavButtons">
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
@@ -179,7 +179,13 @@ export function CharacterPreferenceWindow(props) {
         </Stack>
       </Stack.Item>
       <Stack.Divider />
-      <Stack.Item grow position="relative" overflowX="hidden" overflowY="auto">
+      <Stack.Item
+        grow
+        position="relative"
+        overflowX="hidden"
+        overflowY="auto"
+        className="PreferencesMenu__Content PreferencesMenu__ScrollableContent"
+      >
         {pageContents}
       </Stack.Item>
     </Stack>

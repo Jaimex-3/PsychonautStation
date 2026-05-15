@@ -8,11 +8,15 @@ const viewSchema = z.object({
 
 export const settingsSchema = z.object({
   adminMusicVolume: z.number(),
+  chatFontSize: z.number(),
   coloredNames: z.boolean(),
   fontFamily: z.string(),
   fontSize: z.number(),
   initialized: z.boolean(),
   lineHeight: z.number(),
+  // Psychonaut Station panel customization settings.
+  panelColorTheme: z.enum(['blue', 'midnight']),
+  panelLayoutStyle: z.enum(['modern', 'classic']),
   statFontSize: z.number(),
   statLinked: z.boolean(),
   statTabsStyle: z.string(),
