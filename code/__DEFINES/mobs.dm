@@ -174,8 +174,13 @@
 #define BODYTYPE_SHADOW (1<<7)
 //This limb is a ghost limb and can phase through walls.
 #define BODYTYPE_GHOST (1<<8)
+<<<<<<< HEAD
 ///IPC
 #define BODYTYPE_IPC (1<<9)
+=======
+/// Analagous to BODYSHAPE_DIGITIGRADE, though this one is not removed if the mob's shape changed
+#define BODYTYPE_DIGITIGRADE (1<<9)
+>>>>>>> 47d1635fbcc86b9bc738eec994cd1e7a9ceb1202
 
 // Bodyshape defines for how things can be worn, i.e., what "shape" the mob sprite is
 ///The limb fits the human mold. This is not meant to be literal, if the sprite "fits" on a human, it is "humanoid", regardless of origin.
